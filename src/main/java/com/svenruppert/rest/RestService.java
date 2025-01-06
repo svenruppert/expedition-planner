@@ -1,4 +1,4 @@
-package com.svenruppert;
+package com.svenruppert.rest;
 
 import io.javalin.Javalin;
 

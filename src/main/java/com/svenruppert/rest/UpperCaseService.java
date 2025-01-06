@@ -1,4 +1,4 @@
-package com.svenruppert;
+package com.svenruppert.rest;
 
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,

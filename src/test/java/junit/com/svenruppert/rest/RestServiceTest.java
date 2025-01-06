@@ -1,6 +1,6 @@
-package junit.com.svenruppert;
+package junit.com.svenruppert.rest;
 
-import com.svenruppert.RestService;
+import com.svenruppert.rest.RestService;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.Response;

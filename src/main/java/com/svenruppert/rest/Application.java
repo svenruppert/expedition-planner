@@ -1,4 +1,4 @@
-package com.svenruppert;
+package com.svenruppert.rest;
 
 
 public class Application {
