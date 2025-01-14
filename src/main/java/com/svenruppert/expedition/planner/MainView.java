@@ -1,8 +1,7 @@
 package com.svenruppert.expedition.planner;
 
-import com.svenruppert.expedition.planner.components.AbstractViewHeader;
+import com.svenruppert.expedition.planner.components.AbstractView;
 import com.svenruppert.expedition.planner.services.GreetService;
-import com.svenruppert.expedition.planner.views.AbstractView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -11,10 +10,6 @@ import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouterLink;
-
-import java.util.Collections;
-import java.util.List;
 
 @Route(value = "", layout = MainLayout.class)
 @PreserveOnRefresh
@@ -38,19 +33,10 @@ public class MainView
   }
 
   public MainView() {
+    super(SUB_TITLE);
     button.addClickListener(e -> {
       getContent().add(new Paragraph(greetService.greet(textField.getValue())));
     });
     getContent().add(textField, button);
-  }
-
-  @Override
-  protected AbstractViewHeader createViewHeader() {
-    return new AbstractViewHeader(SUB_TITLE) {
-      @Override
-      public List<RouterLink> secondaryNavigationLinks() {
-        return Collections.emptyList();
-      }
-    };
   }
 }

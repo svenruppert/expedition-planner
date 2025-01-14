@@ -38,6 +38,7 @@ I will list a few provider so that you have a solid base to start with.
 * Compile in Docker
 * Run in Docker - Webservices..
 * PiTest in Docker mit Source Snapshot
+* in Vaadin @Menu Annotation the icon value needs to be changed after https://github.com/vaadin/flow-components/issues/6886 is implemented
 
 ## Requirements:
 

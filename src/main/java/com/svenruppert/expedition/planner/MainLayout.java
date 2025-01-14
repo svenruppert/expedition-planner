@@ -1,92 +1,132 @@
 package com.svenruppert.expedition.planner;
 
-import com.svenruppert.expedition.planner.components.AbstractViewHeader;
 import com.svenruppert.expedition.planner.views.*;
 import com.svenruppert.expedition.planner.views.orders.AllOrdersView;
+import com.svenruppert.expedition.planner.views.orders.OrdersMainLayout;
+import com.svenruppert.expedition.planner.views.users.UsersView;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.html.Footer;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Header;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.vaadin.flow.component.icon.VaadinIcon.*;
 
-public class MainLayout extends AppLayout implements LocaleChangeObserver {
+@Layout
+@PreserveOnRefresh
+public class MainLayout extends AppLayout implements LocaleChangeObserver, AfterNavigationObserver {
 
-  public static final String APPLICATION_TITLE = "application.title";
-  public static final String MENU_ITEM_DASHBOARD = "mainlayout.menuitem.dashboard";
-  public static final String MENU_ITEM_ORDERS = "mainlayout.menuitem.orders";
-  public static final String MENU_ITEM_CUSTOMERS = "mainlayout.menuitem.customers";
-  public static final String MENU_ITEM_PRODUCTS = "mainlayout.menuitem.products";
-  public static final String MENU_ITEM_DOCUMENTS = "mainlayout.menuitem.documents";
-  public static final String MENU_ITEM_TASKS = "mainlayout.menuitem.tasks";
-  public static final String MENU_ITEM_ANALYTICS = "mainlayout.menuitem.analytics";
+    public static final String APPLICATION_TITLE = "application.title";
 
-  private H1 appTitle = new H1();
 
-  public MainLayout() {
-    customizeTitle();
-    addToDrawer(appTitle, primaryNavigation());
-    setPrimarySection(Section.DRAWER);
-  }
+    private H1 viewTitle = new H1();
 
-  private void customizeTitle() {
-//    appTitle.getStyle().set("font-size", "var(--lumo-font-size-l)")
-//        .set("line-height", "var(--lumo-size-l)")
-//        .set("margin", "0 var(--lumo-space-m)");
-  }
+    public MainLayout() {
+        setPrimarySection(Section.DRAWER);
+        addDrawerContent();
+        addHeaderContent();
+    }
 
-  private Scroller primaryNavigation() {
-    SideNav sideNav = new SideNav();
-    sideNav.addItem(
-        new SideNavItem(
-            getTranslation(MENU_ITEM_DASHBOARD),
-            DashboardView.class,
-            DASHBOARD.create()),
-        new SideNavItem(
-            getTranslation(MENU_ITEM_ORDERS),
-            AllOrdersView.class,
-            CART.create()),
-        new SideNavItem(
-            getTranslation(MENU_ITEM_CUSTOMERS),
-            CustomersView.class,
-            USER_HEART.create()),
-        new SideNavItem(
-            getTranslation(MENU_ITEM_PRODUCTS),
-            ProductsView.class,
-            PACKAGE.create()),
-        new SideNavItem(
-            getTranslation(MENU_ITEM_DOCUMENTS),
-            DocumentsView.class,
-            RECORDS.create()),
-        new SideNavItem(
-            getTranslation(MENU_ITEM_TASKS),
-            TasksView.class,
-            LIST.create()),
-        new SideNavItem(
-            getTranslation(MENU_ITEM_ANALYTICS),
-            AnalyticsView.class,
-            CHART.create()));
+    private void addHeaderContent() {
+        DrawerToggle toggle = new DrawerToggle();
 
-    Scroller scroller = new Scroller(sideNav);
-    scroller.setClassName(LumoUtility.Padding.SMALL);
-    return scroller;
-  }
+        viewTitle = new H1();
+        viewTitle.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
 
-  private AbstractViewHeader lastNavBar;
+        addToNavbar(true, toggle, viewTitle);
+    }
 
-  public void updateSecondaryNavigation(AbstractViewHeader navBar) {
-    if (lastNavBar != null) remove(lastNavBar);
-    lastNavBar = navBar;
-    addToNavbar(navBar);
-  }
+    private void addDrawerContent() {
+        H1 appName = new H1(getTranslation(APPLICATION_TITLE));
 
-  @Override
-  public void localeChange(LocaleChangeEvent event) {
-    appTitle.setText(getTranslation(APPLICATION_TITLE));
-    // i18N for the main Menu Entries
-  }
+        appName.addClassNames(LumoUtility.FontWeight.SEMIBOLD, LumoUtility.FontSize.LARGE);
+        Header header = new Header(appName);
+
+        Scroller scroller = primaryNavigation();
+
+        addToDrawer(header, scroller, createFooter());
+    }
+
+    private Scroller primaryNavigation() {
+        SideNav sideNav = new SideNav();
+        sideNav.addItem(
+                new SideNavItem(
+                        getTranslation(DashboardView.MENU_ITEM_DASHBOARD),
+                        DashboardView.class,
+                        DASHBOARD.create()),
+                new SideNavItem(
+                        getTranslation(CustomersView.MENU_ITEM_CUSTOMERS),
+                        CustomersView.class,
+                        USER_HEART.create()),
+                new SideNavItem(
+                        getTranslation(ProductsView.MENU_ITEM_PRODUCTS),
+                        ProductsView.class,
+                        PACKAGE.create()),
+                new SideNavItem(
+                        getTranslation(DocumentsView.MENU_ITEM_DOCUMENTS),
+                        DocumentsView.class,
+                        RECORDS.create()),
+                new SideNavItem(
+                        getTranslation(TasksView.MENU_ITEM_TASKS),
+                        TasksView.class,
+                        LIST.create()),
+                new SideNavItem(
+                        getTranslation(AnalyticsView.MENU_ITEM_ANALYTICS),
+                        AnalyticsView.class,
+                        CHART.create()),
+                new SideNavItem(
+                        getTranslation(UsersView.MENU_ITEM_USERS),
+                        UsersView.class,
+                        USERS.create()));
+
+        //Create Menu Item for ORDERS and its sub views
+        SideNavItem ordersSideNavItem = new SideNavItem(getTranslation(OrdersMainLayout.MENU_ITEM_ORDERS), AllOrdersView.class, VaadinIcon.CART.create());
+        Set<String> orderRoutesSet = getPathAliasesForRoute("orders/");
+        ordersSideNavItem.setPathAliases(orderRoutesSet);
+        sideNav.addItemAtIndex(1, ordersSideNavItem);
+
+        Scroller scroller = new Scroller(sideNav);
+        scroller.setClassName(LumoUtility.Padding.SMALL);
+        return scroller;
+    }
+
+    private static @NotNull Set<String> getPathAliasesForRoute(String parentRoute) {
+        return RouteConfiguration.forApplicationScope().getAvailableRoutes().stream()
+                .filter(routeData -> routeData.getTemplate().startsWith(parentRoute))
+                .map(RouteBaseData::getTemplate)
+                .collect(Collectors.toSet());
+    }
+
+    private Footer createFooter() {
+        Footer layout = new Footer();
+
+        return layout;
+    }
+
+    @Override
+    public void localeChange(LocaleChangeEvent event) {
+        // i18N for the main Menu Entries
+    }
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent event) {
+        String subTitle =
+                UI.getCurrent().getCurrentView() instanceof HasDynamicTitle hasDynamicTitle ?
+                        hasDynamicTitle.getPageTitle() :
+                        "";
+        viewTitle.setText(subTitle);
+    }
 }

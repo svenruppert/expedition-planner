@@ -1,25 +1,15 @@
 package com.svenruppert.expedition.planner.views;
 
-import com.svenruppert.expedition.planner.MainLayout;
-import com.svenruppert.expedition.planner.components.AbstractViewHeader;
+import com.svenruppert.expedition.planner.components.AbstractView;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.i18n.LocaleChangeEvent;
-import com.vaadin.flow.i18n.LocaleChangeObserver;
-import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
 
-@Route(value = "analytics", layout = MainLayout.class)
-@PreserveOnRefresh
-public class AnalyticsView extends AbstractView<HorizontalLayout>
-    implements LocaleChangeObserver {
+@Route(value = "analytics")
+public class AnalyticsView extends AbstractView<HorizontalLayout> {
 
-  @Override
-  protected AbstractViewHeader createViewHeader() {
-    return null;
-  }
+    public static final String MENU_ITEM_ANALYTICS = "mainlayout.menuitem.analytics";
 
-  @Override
-  public void localeChange(LocaleChangeEvent event) {
-
-  }
+    public AnalyticsView() {
+        super(MENU_ITEM_ANALYTICS);
+    }
 }

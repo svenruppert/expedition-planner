@@ -1,24 +1,17 @@
 package com.svenruppert.expedition.planner.views;
 
-import com.svenruppert.expedition.planner.MainLayout;
-import com.svenruppert.expedition.planner.components.AbstractViewHeader;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.i18n.LocaleChangeEvent;
-import com.vaadin.flow.i18n.LocaleChangeObserver;
-import com.vaadin.flow.router.PreserveOnRefresh;
+import com.svenruppert.expedition.planner.components.AbstractView;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
-@Route(value = "dashboard", layout = MainLayout.class)
-@PreserveOnRefresh
-public class DashboardView extends AbstractView<HorizontalLayout>
-    implements LocaleChangeObserver {
-  @Override
-  protected AbstractViewHeader createViewHeader() {
-    return null;
-  }
+@Route(value = "dashboard")
+public class DashboardView extends AbstractView<VerticalLayout> {
 
-  @Override
-  public void localeChange(LocaleChangeEvent event) {
+  public static final String MENU_ITEM_DASHBOARD = "mainlayout.menuitem.dashboard";
 
+  public DashboardView() {
+    super(MENU_ITEM_DASHBOARD);
+    getContent().add(new H1("Dashboard"));
   }
 }
