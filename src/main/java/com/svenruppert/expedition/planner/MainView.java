@@ -21,10 +21,10 @@ public class MainView
   public static final String SAY_HELLO = "say.hello";
   public static final String SUB_TITLE = "mainview.subtitle";
 
-  private GreetService greetService = new GreetService();
+  private final GreetService greetService = new GreetService();
 
-  private Button button = new Button();
-  private TextField textField = new TextField();
+  private final Button button = new Button();
+  private final TextField textField = new TextField();
 
   @Override
   public void localeChange(LocaleChangeEvent localeChangeEvent) {
@@ -34,9 +34,7 @@ public class MainView
 
   public MainView() {
     super(SUB_TITLE);
-    button.addClickListener(e -> {
-      getContent().add(new Paragraph(greetService.greet(textField.getValue())));
-    });
+    button.addClickListener(e -> getContent().add(new Paragraph(greetService.greet(textField.getValue()))));
     getContent().add(textField, button);
   }
 }

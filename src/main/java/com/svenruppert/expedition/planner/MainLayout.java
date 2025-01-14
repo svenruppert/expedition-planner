@@ -105,15 +105,13 @@ public class MainLayout extends AppLayout implements LocaleChangeObserver, After
 
     private static @NotNull Set<String> getPathAliasesForRoute(String parentRoute) {
         return RouteConfiguration.forApplicationScope().getAvailableRoutes().stream()
-                .filter(routeData -> routeData.getTemplate().startsWith(parentRoute))
                 .map(RouteBaseData::getTemplate)
+                .filter(template -> template.startsWith(parentRoute))
                 .collect(Collectors.toSet());
     }
 
     private Footer createFooter() {
-        Footer layout = new Footer();
-
-        return layout;
+        return new Footer();
     }
 
     @Override
