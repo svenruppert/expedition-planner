@@ -6,7 +6,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 
-@Route(value = "/orders/completed")
+@Route(value = OrdersMainLayout.ORDERS_ROUTE + "completed")
 public class CompletedOrdersView extends AbstractView<VerticalLayout> {
 
   public static final String SUB_TITLE = "orders.completed.subtitle";

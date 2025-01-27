@@ -94,7 +94,7 @@ public class MainLayout extends AppLayout implements LocaleChangeObserver, After
 
         //Create Menu Item for ORDERS and its sub views
         SideNavItem ordersSideNavItem = new SideNavItem(getTranslation(OrdersMainLayout.MENU_ITEM_ORDERS), AllOrdersView.class, VaadinIcon.CART.create());
-        Set<String> orderRoutesSet = getPathAliasesForRoute("orders/");
+        Set<String> orderRoutesSet = getPathAliasesForRoute(OrdersMainLayout.ORDERS_ROUTE);
         ordersSideNavItem.setPathAliases(orderRoutesSet);
         sideNav.addItemAtIndex(1, ordersSideNavItem);
 

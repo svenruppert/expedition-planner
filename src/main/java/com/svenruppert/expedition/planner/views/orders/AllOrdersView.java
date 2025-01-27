@@ -5,7 +5,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
-@Route("/orders/all")
+@Route(OrdersMainLayout.ORDERS_ROUTE + "all")
 public class AllOrdersView extends AbstractView<VerticalLayout> {
 
   public static final String SUB_TITLE = "orders.all.subtitle";

@@ -6,13 +6,13 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 
-@Route(value = "/orders/cancelled")
-public class CancelledOrdersView extends AbstractView<VerticalLayout> {
+@Route(value = OrdersMainLayout.ORDERS_ROUTE + "canceled")
+public class CanceledOrdersView extends AbstractView<VerticalLayout> {
 
-  public static final String SUB_TITLE = "orders.cancelled.subtitle";
+  public static final String SUB_TITLE = "orders.canceled.subtitle";
 
-  public CancelledOrdersView() {
+  public CanceledOrdersView() {
     super(SUB_TITLE);
-    getContent().add(new TextField("TBD cancelled"));
+    getContent().add(new TextField("TBD canceled"));
   }
 }
