@@ -6,10 +6,11 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 
-@Route(value = OrdersMainLayout.ORDERS_ROUTE + "completed")
+@Route(value = OrdersMainLayout.ORDERS_ROUTE + CompletedOrdersView.VIEW_ROUTE)
 public class CompletedOrdersView extends AbstractView<VerticalLayout> {
 
   public static final String SUB_TITLE = "orders.completed.subtitle";
+  public static final String VIEW_ROUTE = "completed";
 
   public CompletedOrdersView() {
     super(SUB_TITLE);

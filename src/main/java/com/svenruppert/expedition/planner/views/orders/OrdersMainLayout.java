@@ -21,6 +21,7 @@ public class OrdersMainLayout
   public static final String COMPLETED = "orders.subnavigation.completed";
   public static final String OPEN = "orders.subnavigation.open";
   public static final String ALL = "orders.subnavigation.all";
+
   public static final String ORDERS_ROUTE = "orders/";
 
   public OrdersMainLayout() {
