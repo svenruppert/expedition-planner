@@ -87,7 +87,7 @@
         <junit-platform-maven-plugin.timeout>300</junit-platform-maven-plugin.timeout>
 
         <failOnMissingWebXml>false</failOnMissingWebXml>
-        <vaadin.version>24.5.8</vaadin.version>
+        <vaadin.version>24.6.4</vaadin.version>
         <drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
         <jetty.version>11.0.24</jetty.version>
         <testcontainers.version>1.20.4</testcontainers.version>
@@ -310,6 +310,7 @@
             <version>5.9.2</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
