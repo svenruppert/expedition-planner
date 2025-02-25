@@ -1,38 +1,28 @@
-package com.svenruppert.expedition.planner.views.packing.checklist;
+package com.svenruppert.expedition.planner.components;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.function.SerializableConsumer;
 
-class ItemDialog extends Dialog {
+public abstract class AbstractCrudDialog<T> extends Dialog {
 
-    private final SerializableConsumer<CheckListView.Item> saveConsumer;
-    private final SerializableConsumer<CheckListView.Item> deleteConsumer;
+    private final SerializableConsumer<T> saveConsumer;
+    private final SerializableConsumer<T> deleteConsumer;
 
-    private final Binder<CheckListView.Item> binder = new Binder<>(CheckListView.Item.class);
+    private final Binder<T> binder ;
 
-    public ItemDialog(
-            SerializableConsumer<CheckListView.Item> saveConsumer,
-            SerializableConsumer<CheckListView.Item> deleteConsumer) {
+    public AbstractCrudDialog(Class<T> clazz, SerializableConsumer<T> saveConsumer, SerializableConsumer<T> deleteConsumer) {
         this.saveConsumer = saveConsumer;
         this.deleteConsumer = deleteConsumer;
-
-        TextField nameField = new TextField("Name");
-        nameField.setWidthFull();
-        binder.bind(nameField, "name");
-
-        Checkbox sharedCheckbox = new Checkbox("Shared");
-        binder.bind(sharedCheckbox, "shared");
+        this.binder = new Binder<>(clazz);
 
         VerticalLayout rootLayout = new VerticalLayout();
-        rootLayout.add(nameField, sharedCheckbox);
+        rootLayout.add(createForm());
         rootLayout.add(createButtonLayout());
 
         rootLayout.setPadding(false);
@@ -42,8 +32,14 @@ class ItemDialog extends Dialog {
         setModal(true);
     }
 
-    public void openWithItem(CheckListView.Item item) {
-        binder.readRecord(item);
+    protected abstract Component createForm();
+
+    public Binder<T> getBinder() {
+        return binder;
+    }
+
+    public void openWithItem(T entity) {
+        binder.setBean(entity);
         open();
     }
 
@@ -51,11 +47,7 @@ class ItemDialog extends Dialog {
         Button deleteButton = new Button("delete");
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
         deleteButton.addClickListener(event -> {
-            try {
-                deleteConsumer.accept(binder.writeRecord());
-            } catch (ValidationException e) {
-                throw new RuntimeException(e);
-            }
+            deleteConsumer.accept(binder.getBean());
             this.close();
         });
 
@@ -67,12 +59,10 @@ class ItemDialog extends Dialog {
         Button saveButton = new Button("save");
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         saveButton.addClickListener(event -> {
-            try {
-                saveConsumer.accept(binder.writeRecord());
-            } catch (ValidationException e) {
-                throw new RuntimeException(e);
+            if (!binder.validate().hasErrors()) {
+                saveConsumer.accept(binder.getBean());
+                this.close();
             }
-            this.close();
         });
 
         return new HorizontalLayout(

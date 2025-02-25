@@ -1,9 +1,9 @@
 package com.svenruppert.expedition.planner.views.packing;
 
 import com.svenruppert.expedition.planner.MainLayout;
-import com.svenruppert.expedition.planner.views.packing.allocation.AllocationView;
-import com.svenruppert.expedition.planner.views.packing.checklist.CheckListView;
-import com.svenruppert.expedition.planner.views.packing.taskboard.TaskBoardView;
+import com.svenruppert.expedition.planner.views.packing.assignment.AssignmentBoardView;
+import com.svenruppert.expedition.planner.views.packing.itemlist.ItemListView;
+import com.svenruppert.expedition.planner.views.packing.participants.ParticipantsView;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
@@ -22,9 +22,9 @@ public class PackingMainLayout extends Composite<VerticalLayout>
     public PackingMainLayout() {
         Tabs tabs = new Tabs();
 
-        tabs.add(new Tab(new RouterLink(getTranslation(CheckListView.SUB_TITLE), CheckListView.class)));
-        tabs.add(new Tab(new RouterLink(getTranslation(AllocationView.SUB_TITLE), AllocationView.class)));
-        tabs.add(new Tab(new RouterLink(getTranslation(TaskBoardView.SUB_TITLE), TaskBoardView.class)));
+        tabs.add(new Tab(new RouterLink(getTranslation(ItemListView.SUB_TITLE), ItemListView.class)));
+        tabs.add(new Tab(new RouterLink(getTranslation(ParticipantsView.SUB_TITLE), ParticipantsView.class)));
+        tabs.add(new Tab(new RouterLink(getTranslation(AssignmentBoardView.SUB_TITLE), AssignmentBoardView.class)));
 
         getContent().add(tabs);
     }

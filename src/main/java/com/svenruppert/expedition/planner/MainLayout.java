@@ -4,7 +4,7 @@ import com.svenruppert.expedition.planner.views.*;
 import com.svenruppert.expedition.planner.views.orders.AllOrdersView;
 import com.svenruppert.expedition.planner.views.orders.OrdersMainLayout;
 import com.svenruppert.expedition.planner.views.packing.PackingMainLayout;
-import com.svenruppert.expedition.planner.views.packing.checklist.CheckListView;
+import com.svenruppert.expedition.planner.views.packing.itemlist.ItemListView;
 import com.svenruppert.expedition.planner.views.users.UsersView;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -101,7 +101,7 @@ public class MainLayout extends AppLayout implements LocaleChangeObserver, After
         sideNav.addItemAtIndex(1, ordersSideNavItem);
 
         //Create Menu Item for PACKING ITEM MANAGEMENT and its sub views
-        SideNavItem packingSideNavItem = new SideNavItem(getTranslation(PackingMainLayout.MENU_ITEMS_PACKING), CheckListView.class, SUITCASE.create());
+        SideNavItem packingSideNavItem = new SideNavItem(getTranslation(PackingMainLayout.MENU_ITEMS_PACKING), ItemListView.class, SUITCASE.create());
         Set<String> packeingRoutesSet = getPathAliasesForRoute(PackingMainLayout.PACKING_ROUTE);
         packingSideNavItem.setPathAliases(packeingRoutesSet);
         sideNav.addItem(packingSideNavItem);
