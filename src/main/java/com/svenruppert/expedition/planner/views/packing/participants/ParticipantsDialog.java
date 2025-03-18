@@ -9,13 +9,15 @@ import com.vaadin.flow.function.SerializableConsumer;
 
 class ParticipantsDialog extends AbstractCrudDialog<Participant> {
 
-    public ParticipantsDialog(SerializableConsumer<Participant> saveConsumer, SerializableConsumer<Participant> deleteConsumer) {
+    public ParticipantsDialog(
+        SerializableConsumer<Participant> saveConsumer,
+        SerializableConsumer<Participant> deleteConsumer) {
         super(Participant.class, saveConsumer, deleteConsumer);
     }
 
     @Override
     protected Component createForm() {
-        TextField nameField = new TextField("Name");
+        TextField nameField = new TextField("Name"); //TODO i18n
         nameField.setWidthFull();
         getBinder().bind(nameField, Participant::getName, Participant::setName);
 

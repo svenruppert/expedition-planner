@@ -18,11 +18,11 @@ class ItemDialog extends AbstractCrudDialog<Item> {
 
     @Override
     protected Component createForm() {
-        TextField nameField = new TextField("Name");
+        TextField nameField = new TextField("Name"); //TODO i18n
         nameField.setWidthFull();
         getBinder().bind(nameField, "name");
 
-        Checkbox sharedCheckbox = new Checkbox("Shared");
+        Checkbox sharedCheckbox = new Checkbox("Shared"); //TODO i18n
         getBinder().bind(sharedCheckbox, "shared");
 
         VerticalLayout rootLayout = new VerticalLayout();

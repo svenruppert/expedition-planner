@@ -44,19 +44,19 @@ public abstract class AbstractCrudDialog<T> extends Dialog {
     }
 
     private HorizontalLayout createButtonLayout() {
-        Button deleteButton = new Button("delete");
+        Button deleteButton = new Button("delete"); //TODO i18n
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
         deleteButton.addClickListener(event -> {
             deleteConsumer.accept(binder.getBean());
             this.close();
         });
 
-        Button cancelButton = new Button("cancel");
+        Button cancelButton = new Button("cancel"); //TODO i18n
         cancelButton.addClickListener(event -> {
             this.close();
         });
 
-        Button saveButton = new Button("save");
+        Button saveButton = new Button("save"); //TODO i18n
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         saveButton.addClickListener(event -> {
             if (!binder.validate().hasErrors()) {

@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.svenruppert</groupId>
         <artifactId>dependencies</artifactId>
-        <version>06.00.00</version>
+        <version>06.00.02</version>
     </parent>
 
     <artifactId>expedition-planner</artifactId>
@@ -199,6 +199,7 @@
             <groupId>net.oneandone.reflections8</groupId>
             <artifactId>reflections8</artifactId>
         </dependency>
+
         <!--        DemoApplication REST -->
         <dependency>
             <groupId>io.javalin</groupId>
@@ -213,6 +214,13 @@
         </dependency>
 
         <!--Infrastructure-->
+
+        <dependency>
+            <groupId>org.eclipse.store</groupId>
+            <artifactId>storage-embedded</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+
         <dependency>
             <groupId>io.undertow</groupId>
             <artifactId>undertow-core</artifactId>

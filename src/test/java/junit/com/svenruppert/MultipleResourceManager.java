@@ -1,4 +1,4 @@
-package com.svenruppert.expedition.planner.services;
+package junit.com.svenruppert;
 
 import io.undertow.UndertowMessages;
 import io.undertow.server.handlers.resource.Resource;

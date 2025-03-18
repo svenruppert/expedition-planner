@@ -19,9 +19,9 @@ public class ItemListView extends AbstractView<VerticalLayout> {
 
     public static List<Item> itemList = new ArrayList<>(
             List.of(
-                new Item("Isomatte", false),
-                new Item("Zelt", true),
-                new Item("Schlafsack", false))
+                new Item("Isomatte", false), //TODO i18n
+                new Item("Zelt", true), //TODO i18n
+                new Item("Schlafsack", false)) //TODO i18n
     );
 
     public ItemListView() {

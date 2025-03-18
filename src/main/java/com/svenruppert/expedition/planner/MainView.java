@@ -26,15 +26,16 @@ public class MainView
   private final Button button = new Button();
   private final TextField textField = new TextField();
 
+  public MainView() {
+    super(SUB_TITLE);
+    button.addClickListener(e -> getContent()
+        .add(new Paragraph(greetService.greet(textField.getValue()))));
+    getContent().add(textField, button);
+  }
+
   @Override
   public void localeChange(LocaleChangeEvent localeChangeEvent) {
     button.setText(getTranslation(SAY_HELLO));
     textField.setLabel(getTranslation(YOUR_NAME));
-  }
-
-  public MainView() {
-    super(SUB_TITLE);
-    button.addClickListener(e -> getContent().add(new Paragraph(greetService.greet(textField.getValue()))));
-    getContent().add(textField, button);
   }
 }

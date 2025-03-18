@@ -10,36 +10,42 @@ import com.vaadin.flow.router.Route;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.svenruppert.expedition.planner.services.SingletonRegistry.getOrCreateParticipantsService;
+
 @Route(ParticipantsView.VIEW_NAME)
 public class ParticipantsView extends AbstractView<VerticalLayout> {
 
-    public static final String SUB_TITLE = "packing.participants.subtitle";
-    public static final String VIEW_NAME = PackingMainLayout.PACKING_ROUTE + "participants";
-    private final CrudGrid<Participant> participantsGrid;
+  public static final String SUB_TITLE = "packing.participants.subtitle";
+  public static final String VIEW_NAME = PackingMainLayout.PACKING_ROUTE + "participants";
+  private final CrudGrid<Participant> participantsGrid;
+  public List<Participant> allParticipants = new ArrayList<>(); //TODO ??? public
+  private ParticipantsService participantsService = getOrCreateParticipantsService();
 
-    public static List<Participant> participantList = new ArrayList<>(
-            List.of(new Participant("Alice"), new Participant("Bob"), new Participant("Carl"))
-    );
 
-    public ParticipantsView() {
-        super(SUB_TITLE);
+  public ParticipantsView() {
+    super(SUB_TITLE);
+    allParticipants.addAll(participantsService.allParticipants());
+    participantsGrid = new CrudGrid<>(Participant.class, new ParticipantsDialog(this::saveItem, this::deleteItem));
+    participantsGrid.getGrid().setItems(allParticipants);
+    getContent().add(participantsGrid);
+    getContent().setSizeFull();
+  }
 
-        participantsGrid = new CrudGrid<>(Participant.class, new ParticipantsDialog(this::saveItem, this::deleteItem));
-        participantsGrid.getGrid().setItems(participantList);
-
-        getContent().add(participantsGrid);
-        getContent().setSizeFull();
+  private void saveItem(Participant participant) {
+    if (!allParticipants.contains(participant)) {
+      participantsService.addParticipant(participant);
+      participantsService.saveRepository();
+      allParticipants.clear();
+      allParticipants.addAll(participantsService.allParticipants());
     }
+    participantsGrid.getGrid().getDataProvider().refreshAll();
+  }
 
-    private void saveItem(Participant participant) {
-        if (!participantList.contains(participant)) {
-            participantList.add(participant);
-        }
-        participantsGrid.getGrid().getDataProvider().refreshAll();
-    }
-
-    private void deleteItem(Participant participant) {
-        participantList.remove(participant);
-        participantsGrid.getGrid().getDataProvider().refreshAll();
-    }
+  private void deleteItem(Participant participant) {
+    participantsService.deleteParticipant(participant);
+    participantsService.saveRepository();
+    allParticipants.clear();
+    allParticipants.addAll(participantsService.allParticipants());
+    participantsGrid.getGrid().getDataProvider().refreshAll();
+  }
 }

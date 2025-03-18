@@ -12,6 +12,6 @@ public class DashboardView extends AbstractView<VerticalLayout> {
 
   public DashboardView() {
     super(MENU_ITEM_DASHBOARD);
-    getContent().add(new H1("Dashboard"));
+    getContent().add(new H1("Dashboard")); //TODO i18n
   }
 }

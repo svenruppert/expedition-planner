@@ -14,4 +14,5 @@ import com.vaadin.flow.theme.lumo.Lumo;
 @Push
 @Theme(value = "my-theme", variant = Lumo.DARK)
 public class AppShell implements AppShellConfigurator {
+
 }

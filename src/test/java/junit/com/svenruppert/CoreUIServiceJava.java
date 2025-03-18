@@ -1,7 +1,6 @@
 package junit.com.svenruppert;
 
 import com.svenruppert.dependencies.core.logger.HasLogger;
-import com.svenruppert.expedition.planner.services.MultipleResourceManager;
 import com.svenruppert.functional.model.Result;
 import com.vaadin.flow.di.LookupInitializer;
 import com.vaadin.flow.router.Route;
