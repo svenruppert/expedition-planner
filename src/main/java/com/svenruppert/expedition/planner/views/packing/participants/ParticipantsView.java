@@ -1,51 +1,40 @@
 package com.svenruppert.expedition.planner.views.packing.participants;
 
-import com.svenruppert.expedition.planner.components.AbstractView;
-import com.svenruppert.expedition.planner.components.CrudGrid;
+import com.svenruppert.expedition.planner.components.AbstractCrudView;
 import com.svenruppert.expedition.planner.data.entity.Participant;
 import com.svenruppert.expedition.planner.views.packing.PackingMainLayout;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.svenruppert.expedition.planner.services.SingletonRegistry.getOrCreateParticipantsService;
 
 @Route(ParticipantsView.VIEW_NAME)
-public class ParticipantsView extends AbstractView<VerticalLayout> {
+public class ParticipantsView extends AbstractCrudView<Participant, ParticipantService, VerticalLayout> {
 
   public static final String SUB_TITLE = "packing.participants.subtitle";
   public static final String VIEW_NAME = PackingMainLayout.PACKING_ROUTE + "participants";
-  private final CrudGrid<Participant> participantsGrid;
-  public List<Participant> allParticipants = new ArrayList<>(); //TODO ??? public
-  private ParticipantsService participantsService = getOrCreateParticipantsService();
-
 
   public ParticipantsView() {
-    super(SUB_TITLE);
-    allParticipants.addAll(participantsService.allParticipants());
-    participantsGrid = new CrudGrid<>(Participant.class, new ParticipantsDialog(this::saveItem, this::deleteItem));
-    participantsGrid.getGrid().setItems(allParticipants);
-    getContent().add(participantsGrid);
-    getContent().setSizeFull();
+    super(Participant.class, SUB_TITLE);
   }
 
-  private void saveItem(Participant participant) {
-    if (!allParticipants.contains(participant)) {
-      participantsService.addParticipant(participant);
-      participantsService.saveRepository();
-      allParticipants.clear();
-      allParticipants.addAll(participantsService.allParticipants());
-    }
-    participantsGrid.getGrid().getDataProvider().refreshAll();
+  @Override
+  protected ParticipantService getService() {
+    return getOrCreateParticipantsService();
   }
 
-  private void deleteItem(Participant participant) {
-    participantsService.deleteParticipant(participant);
-    participantsService.saveRepository();
-    allParticipants.clear();
-    allParticipants.addAll(participantsService.allParticipants());
-    participantsGrid.getGrid().getDataProvider().refreshAll();
+  @Override
+  protected Component createDialogForm(Binder<Participant> binder) {
+    TextField nameField = new TextField(getTranslation("packing.participants.nameField.label"));
+    nameField.setWidthFull();
+    binder.bind(nameField, Participant::getName, Participant::setName);
+
+    VerticalLayout rootLayout = new VerticalLayout();
+    rootLayout.add(nameField);
+
+    return rootLayout;
   }
 }

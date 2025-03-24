@@ -7,7 +7,7 @@ import com.svenruppert.expedition.planner.services.SingletonRegistry;
 import com.svenruppert.expedition.planner.services.persistence.PersistenceService;
 import com.svenruppert.expedition.planner.services.user.User;
 import com.svenruppert.expedition.planner.services.user.UserService;
-import com.svenruppert.expedition.planner.views.packing.participants.ParticipantsService;
+import com.svenruppert.expedition.planner.views.packing.participants.ParticipantService;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
@@ -40,15 +40,15 @@ public class AppStartupListener implements ServletContextListener, HasLogger {
     }
 
     logger().info("Checking for participants...");
-    ParticipantsService participantsService = SingletonRegistry.getOrCreateParticipantsService();
-    if (participantsService.allParticipants().isEmpty()) {
+    ParticipantService participantService = SingletonRegistry.getOrCreateParticipantsService();
+    if (participantService.all().isEmpty()) {
       logger().info("Creating default participants");
       List.of(
               new Participant("Alice"),
               new Participant("Bob"),
               new Participant("Carl"))
-          .forEach(participant -> participantsService.addParticipant(participant));
-      participantsService.saveRepository();
+          .forEach(participant -> participantService.add(participant));
+      participantService.saveRepository();
 
     } else {
       logger().info("Participants already exists.");

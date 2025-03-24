@@ -16,13 +16,13 @@ public abstract class AbstractCrudDialog<T> extends Dialog {
 
     private final Binder<T> binder ;
 
-    public AbstractCrudDialog(Class<T> clazz, SerializableConsumer<T> saveConsumer, SerializableConsumer<T> deleteConsumer) {
+    public AbstractCrudDialog(Class<T> clazz, Binder<T> binder, SerializableConsumer<T> saveConsumer, SerializableConsumer<T> deleteConsumer) {
         this.saveConsumer = saveConsumer;
         this.deleteConsumer = deleteConsumer;
-        this.binder = new Binder<>(clazz);
+        this.binder = binder;
 
         VerticalLayout rootLayout = new VerticalLayout();
-        rootLayout.add(createForm());
+        rootLayout.add(createFormLayout());
         rootLayout.add(createButtonLayout());
 
         rootLayout.setPadding(false);
@@ -32,7 +32,7 @@ public abstract class AbstractCrudDialog<T> extends Dialog {
         setModal(true);
     }
 
-    protected abstract Component createForm();
+    protected abstract Component createFormLayout();
 
     public Binder<T> getBinder() {
         return binder;
@@ -44,19 +44,19 @@ public abstract class AbstractCrudDialog<T> extends Dialog {
     }
 
     private HorizontalLayout createButtonLayout() {
-        Button deleteButton = new Button("delete"); //TODO i18n
+        Button deleteButton = new Button(getTranslation("cruddialog.delete.label"));
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
         deleteButton.addClickListener(event -> {
             deleteConsumer.accept(binder.getBean());
             this.close();
         });
 
-        Button cancelButton = new Button("cancel"); //TODO i18n
+        Button cancelButton = new Button(getTranslation("cruddialog.cancel.label"));
         cancelButton.addClickListener(event -> {
             this.close();
         });
 
-        Button saveButton = new Button("save"); //TODO i18n
+        Button saveButton = new Button(getTranslation("cruddialog.save.label"));
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         saveButton.addClickListener(event -> {
             if (!binder.validate().hasErrors()) {

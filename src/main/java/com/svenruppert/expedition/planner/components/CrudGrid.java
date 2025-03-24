@@ -24,9 +24,7 @@ public class CrudGrid<T> extends Composite<Div> {
         this.clazz = clazz;
         this.dialog = dialog;
 
-        grid.addComponentColumn(this::createOpenEntityDialogIcon)
-                .setTextAlign(ColumnTextAlign.CENTER)
-                .setFlexGrow(0);
+        addEditIconColumn();
 
         Button addButton = new Button(VaadinIcon.PLUS_CIRCLE.create(), this::addButtonClicked);
         addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -35,6 +33,12 @@ public class CrudGrid<T> extends Composite<Div> {
         getContent().add(grid, addButton);
         getContent().setWidth("100%");
         getContent().setHeight("100%");
+    }
+
+    public void addEditIconColumn() {
+        grid.addComponentColumn(this::createOpenEntityDialogIcon)
+                .setTextAlign(ColumnTextAlign.CENTER)
+                .setFlexGrow(0);
     }
 
     private Component createOpenEntityDialogIcon(T t) {
@@ -48,13 +52,7 @@ public class CrudGrid<T> extends Composite<Div> {
     private void addButtonClicked(ClickEvent<Button> buttonClickEvent) {
         try {
             dialog.openWithItem(clazz.getConstructor().newInstance());
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }

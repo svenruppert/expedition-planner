@@ -4,6 +4,7 @@ public class Item {
 
     private String name;
     private boolean shared;
+    private Participant responsibleForShared;
 
     public Item() {
     }
@@ -11,6 +12,7 @@ public class Item {
     public Item(String name, boolean shared) {
         this.name = name;
         this.shared = shared;
+        this.responsibleForShared = null;
     }
 
     public String getName() {
@@ -27,6 +29,14 @@ public class Item {
 
     public void setShared(boolean shared) {
         this.shared = shared;
+    }
+
+    public Participant getResponsibleForShared() {
+        return responsibleForShared;
+    }
+
+    public void setResponsibleForShared(Participant responsibleForShared) {
+        this.responsibleForShared = responsibleForShared;
     }
 }
 

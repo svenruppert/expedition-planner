@@ -5,43 +5,48 @@ import com.svenruppert.expedition.planner.data.entity.Item;
 import com.svenruppert.expedition.planner.data.entity.Participant;
 import com.svenruppert.expedition.planner.services.SingletonRegistry;
 import com.svenruppert.expedition.planner.views.packing.PackingMainLayout;
-import com.svenruppert.expedition.planner.views.packing.itemlist.ItemListView;
-import com.svenruppert.expedition.planner.views.packing.participants.ParticipantsService;
+import com.svenruppert.expedition.planner.views.packing.itemlist.ItemService;
+import com.svenruppert.expedition.planner.views.packing.participants.ParticipantService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+
+import java.util.Objects;
 
 @Route(AssignmentBoardView.VIEW_ROUTE)
 public class AssignmentBoardView extends AbstractView<VerticalLayout> {
 
-  public static final String SUB_TITLE = "packing.assignment.subtitle";
-  public static final String VIEW_ROUTE = PackingMainLayout.PACKING_ROUTE + "assignmentboard";
+    public static final String SUB_TITLE = "packing.assignment.subtitle";
+    public static final String VIEW_ROUTE = PackingMainLayout.PACKING_ROUTE + "assignmentboard";
 
-  private ParticipantsService participantsService = SingletonRegistry.getOrCreateParticipantsService();
+    public AssignmentBoardView() {
+        super(SUB_TITLE);
 
-  public AssignmentBoardView() {
-    super(SUB_TITLE);
+        ItemService itemService = SingletonRegistry.getOrCreateItemService();
+        var itemList = itemService.all();
 
-    var itemList = ItemListView.itemList;
-    var participantList = participantsService.allParticipants();
+        ParticipantService participantService = SingletonRegistry.getOrCreateParticipantsService();
+        var participantList = participantService.all();
 
-    var grid = new Grid<>(Item.class);
-    grid.setColumns("name");
+        var grid = new Grid<>(Item.class);
+        grid.setColumns("name");
 
-    participantList.forEach(participant ->
-        grid.addComponentColumn(item -> createCheckbox(item, participant))
-            .setHeader(participant.getName()));
+        participantList.forEach(participant ->
+                grid.addComponentColumn(item -> createCheckbox(item, participant))
+                        .setHeader(participant.getName()));
 
-    grid.setItems(itemList);
+        grid.setItems(itemList);
 
-    getContent().add(grid);
-    getContent().setSizeFull();
-  }
+        getContent().add(grid);
+        getContent().setSizeFull();
+    }
 
-  private Component createCheckbox(Item item, Participant participant) {
-    return (item.isShared() && !participant.getName().equals("Alice")) ? new Div() : new Checkbox();
-  }
+    private Component createCheckbox(Item item, Participant participant) {
+        boolean isSharedAndParticipant = (item.isShared() && !Objects.equals(participant, item.getResponsibleForShared())) ;
+        var checkbox = new Checkbox();
+        checkbox.setEnabled(!isSharedAndParticipant);
+        return checkbox;
+    }
 }
