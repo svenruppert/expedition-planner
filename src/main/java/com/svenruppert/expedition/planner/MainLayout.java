@@ -1,6 +1,7 @@
 package com.svenruppert.expedition.planner;
 
 import com.svenruppert.expedition.planner.views.*;
+import com.svenruppert.expedition.planner.views.chat.ChatView;
 import com.svenruppert.expedition.planner.views.orders.AllOrdersView;
 import com.svenruppert.expedition.planner.views.orders.OrdersMainLayout;
 import com.svenruppert.expedition.planner.views.packing.PackingMainLayout;
@@ -92,7 +93,11 @@ public class MainLayout extends AppLayout implements LocaleChangeObserver, After
                 new SideNavItem(
                         getTranslation(UsersView.MENU_ITEM_USERS),
                         UsersView.class,
-                        USERS.create()));
+                        USERS.create()),
+                new SideNavItem(
+                        getTranslation(ChatView.MENU_ITEM_CHAT),
+                        ChatView.class,
+                        CHAT.create()));
 
         //Create Menu Item for ORDERS and its sub views
         SideNavItem ordersSideNavItem = new SideNavItem(getTranslation(OrdersMainLayout.MENU_ITEM_ORDERS), AllOrdersView.class, VaadinIcon.CART.create());
