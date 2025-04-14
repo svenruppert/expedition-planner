@@ -1,6 +1,7 @@
 package com.svenruppert.expedition.planner;
 
 import com.svenruppert.dependencies.core.logger.HasLogger;
+import com.svenruppert.expedition.planner.data.entity.DietaryRestriction;
 import com.svenruppert.expedition.planner.data.entity.Participant;
 import com.svenruppert.expedition.planner.services.CreateEntityResponse;
 import com.svenruppert.expedition.planner.services.SingletonRegistry;
@@ -13,6 +14,7 @@ import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.svenruppert.expedition.planner.services.user.UserRepository.ANONYMOUS_USER;
 
@@ -44,12 +46,12 @@ public class AppStartupListener implements ServletContextListener, HasLogger {
     if (participantService.all().isEmpty()) {
       logger().info("Creating default participants");
       List.of(
-              new Participant("Alice"),
-              new Participant("Bob"),
-              new Participant("Carl"))
+              new Participant("Alice", 2000, Set.of(DietaryRestriction.EGG_ALLERGY,
+                      DietaryRestriction.LACTOSE_FREE)),
+              new Participant("Bob", 3000, Set.of(DietaryRestriction.HISTAMINE_INTOLERANT)),
+              new Participant("Carl", 2750, Set.of(DietaryRestriction.VEGAN)))
           .forEach(participant -> participantService.add(participant));
       participantService.saveRepository();
-
     } else {
       logger().info("Participants already exists.");
     }

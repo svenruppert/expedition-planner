@@ -1,10 +1,13 @@
 package com.svenruppert.expedition.planner.views.packing.participants;
 
 import com.svenruppert.expedition.planner.components.AbstractCrudView;
+import com.svenruppert.expedition.planner.data.entity.DietaryRestriction;
 import com.svenruppert.expedition.planner.data.entity.Participant;
 import com.svenruppert.expedition.planner.views.packing.PackingMainLayout;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
@@ -19,6 +22,9 @@ public class ParticipantsView extends AbstractCrudView<Participant, ParticipantS
 
   public ParticipantsView() {
     super(Participant.class, SUB_TITLE);
+
+    getCrudGrid().getGrid().setColumns("name", "dailyCaloricRequirement", "restrictions");
+    getCrudGrid().addEditIconColumn();
   }
 
   @Override
@@ -32,8 +38,16 @@ public class ParticipantsView extends AbstractCrudView<Participant, ParticipantS
     nameField.setWidthFull();
     binder.bind(nameField, Participant::getName, Participant::setName);
 
+    IntegerField caloriesField = new IntegerField(getTranslation("packing.participants.caloriesField.label"));
+    caloriesField.setWidthFull();
+    binder.bind(caloriesField, Participant::getDailyCaloricRequirement, Participant::setDailyCaloricRequirement);
+
+    MultiSelectComboBox<DietaryRestriction> restrictionsField = new MultiSelectComboBox<>(getTranslation("packing.participants.dietaryRestrictionField.label"));
+    restrictionsField.setItems(DietaryRestriction.values());
+    binder.bind(restrictionsField, Participant::getRestrictions, Participant::setRestrictions);
+
     VerticalLayout rootLayout = new VerticalLayout();
-    rootLayout.add(nameField);
+    rootLayout.add(nameField, caloriesField, restrictionsField);
 
     return rootLayout;
   }
