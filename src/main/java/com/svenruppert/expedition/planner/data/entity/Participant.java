@@ -1,19 +1,18 @@
 package com.svenruppert.expedition.planner.data.entity;
 
-import org.apache.commons.compress.utils.Sets;
-
+import java.util.HashSet;
 import java.util.Set;
 
 public class Participant {
 
     private String name ;
     private Integer dailyCaloricRequirement ;
-    private Set<DietaryRestriction> restrictions = Sets.newHashSet();
+    private Set<DietaryRestriction> restrictions = new HashSet<>();
 
     public Participant(String name, Integer dailyCaloricRequirement, Set<DietaryRestriction> restrictions) {
         this.name = name;
         this.dailyCaloricRequirement = dailyCaloricRequirement;
-        this.restrictions = restrictions;
+        this.restrictions.addAll(restrictions);
     }
 
     public String getName() {
@@ -37,6 +36,6 @@ public class Participant {
     }
 
     public void setRestrictions(Set<DietaryRestriction> restrictions) {
-        this.restrictions = restrictions;
+        this.restrictions.retainAll(restrictions);
     }
 }
