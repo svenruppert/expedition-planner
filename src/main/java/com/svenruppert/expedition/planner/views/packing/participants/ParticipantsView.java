@@ -26,19 +26,21 @@ public class ParticipantsView extends AbstractCrudView<Participant, ParticipantS
     public ParticipantsView() {
         super(Participant.class, SUB_TITLE);
 
-        getCrudGrid().getGrid().setColumns("name", "dailyCaloricRequirement", "restrictions");
-        //getCrudGrid().getGrid().addColumn(createDietRestrictionRenderer()).setHeader("Diet Restriction");
+//        getCrudGrid().getGrid().setColumns("name", "dailyCaloricRequirement", "restrictions");
+        getCrudGrid().getGrid().setColumns("name", "dailyCaloricRequirement");
+        getCrudGrid().getGrid().addColumn(createDietRestrictionRenderer()).setHeader("Diet Restriction");
         getCrudGrid().addEditIconColumn();
     }
 
+
     private LitRenderer<Participant> createDietRestrictionRenderer() {
-        return LitRenderer.<Participant>of("<div>" +
-                        "${dietRestrictions.map((restriction) => html` <span>${restriction}</span>`)}" +
-                    "</div>")
+        return LitRenderer.<Participant>of("<ul>" +
+                        "${item.dietRestrictions.map((restriction) => html`<li>${restriction}</li>`)}" +
+                        "</ul>")
                 .withProperty("dietRestrictions", participant ->
                         participant.getRestrictions().stream()
-                            .map(dietaryRestriction -> getTranslation(dietaryRestriction.getNameKey()))
-                            .collect(Collectors.toSet()));
+                                .map(dietaryRestriction -> getTranslation(dietaryRestriction.getNameKey()))
+                                .collect(Collectors.toSet()));
     }
 
     @Override
