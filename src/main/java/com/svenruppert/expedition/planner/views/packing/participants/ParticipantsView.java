@@ -10,45 +10,59 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.router.Route;
+
+import java.util.stream.Collectors;
 
 import static com.svenruppert.expedition.planner.services.SingletonRegistry.getOrCreateParticipantsService;
 
 @Route(ParticipantsView.VIEW_NAME)
 public class ParticipantsView extends AbstractCrudView<Participant, ParticipantService, VerticalLayout> {
 
-  public static final String SUB_TITLE = "packing.participants.subtitle";
-  public static final String VIEW_NAME = PackingMainLayout.PACKING_ROUTE + "participants";
+    public static final String SUB_TITLE = "packing.participants.subtitle";
+    public static final String VIEW_NAME = PackingMainLayout.PACKING_ROUTE + "participants";
 
-  public ParticipantsView() {
-    super(Participant.class, SUB_TITLE);
+    public ParticipantsView() {
+        super(Participant.class, SUB_TITLE);
 
-    getCrudGrid().getGrid().setColumns("name", "dailyCaloricRequirement", "restrictions");
-    getCrudGrid().addEditIconColumn();
-  }
+        getCrudGrid().getGrid().setColumns("name", "dailyCaloricRequirement", "restrictions");
+        //getCrudGrid().getGrid().addColumn(createDietRestrictionRenderer()).setHeader("Diet Restriction");
+        getCrudGrid().addEditIconColumn();
+    }
 
-  @Override
-  protected ParticipantService getService() {
-    return getOrCreateParticipantsService();
-  }
+    private LitRenderer<Participant> createDietRestrictionRenderer() {
+        return LitRenderer.<Participant>of("<div>" +
+                        "${dietRestrictions.map((restriction) => html` <span>${restriction}</span>`)}" +
+                    "</div>")
+                .withProperty("dietRestrictions", participant ->
+                        participant.getRestrictions().stream()
+                            .map(dietaryRestriction -> getTranslation(dietaryRestriction.getNameKey()))
+                            .collect(Collectors.toSet()));
+    }
 
-  @Override
-  protected Component createDialogForm(Binder<Participant> binder) {
-    TextField nameField = new TextField(getTranslation("packing.participants.nameField.label"));
-    nameField.setWidthFull();
-    binder.bind(nameField, Participant::getName, Participant::setName);
+    @Override
+    protected ParticipantService getService() {
+        return getOrCreateParticipantsService();
+    }
 
-    IntegerField caloriesField = new IntegerField(getTranslation("packing.participants.caloriesField.label"));
-    caloriesField.setWidthFull();
-    binder.bind(caloriesField, Participant::getDailyCaloricRequirement, Participant::setDailyCaloricRequirement);
+    @Override
+    protected Component createDialogForm(Binder<Participant> binder) {
+        TextField nameField = new TextField(getTranslation("packing.participants.nameField.label"));
+        nameField.setWidthFull();
+        binder.bind(nameField, Participant::getName, Participant::setName);
 
-    MultiSelectComboBox<DietaryRestriction> restrictionsField = new MultiSelectComboBox<>(getTranslation("packing.participants.dietaryRestrictionField.label"));
-    restrictionsField.setItems(DietaryRestriction.values());
-    binder.bind(restrictionsField, Participant::getRestrictions, Participant::setRestrictions);
+        IntegerField caloriesField = new IntegerField(getTranslation("packing.participants.caloriesField.label"));
+        caloriesField.setWidthFull();
+        binder.bind(caloriesField, Participant::getDailyCaloricRequirement, Participant::setDailyCaloricRequirement);
 
-    VerticalLayout rootLayout = new VerticalLayout();
-    rootLayout.add(nameField, caloriesField, restrictionsField);
+        MultiSelectComboBox<DietaryRestriction> restrictionsField = new MultiSelectComboBox<>(getTranslation("packing.participants.dietaryRestrictionField.label"));
+        restrictionsField.setItems(DietaryRestriction.values());
+        binder.bind(restrictionsField, Participant::getRestrictions, Participant::setRestrictions);
 
-    return rootLayout;
-  }
+        VerticalLayout rootLayout = new VerticalLayout();
+        rootLayout.add(nameField, caloriesField, restrictionsField);
+
+        return rootLayout;
+    }
 }

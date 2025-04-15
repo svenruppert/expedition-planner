@@ -1,7 +1,10 @@
 package com.svenruppert.expedition.planner.data.entity;
 
+/**
+ * An enum representing various dietary restrictions and food intolerances.
+ * Uses i18n keys for internationalized texts.
+ */
 public enum DietaryRestriction {
-
     // Diet forms
     VEGETARIAN("diet.vegetarian.name", "diet.vegetarian.description"),
     VEGAN("diet.vegan.name", "diet.vegan.description"),
@@ -29,38 +32,19 @@ public enum DietaryRestriction {
         this.descriptionKey = descriptionKey;
     }
 
+    /**
+     * Returns the name key for internationalization.
+     * @return The name key
+     */
     public String getNameKey() {
         return nameKey;
     }
 
+    /**
+     * Returns the description key for internationalization.
+     * @return The description key
+     */
     public String getDescriptionKey() {
         return descriptionKey;
-    }
-
-    /**
-     * Returns the localized name based on the current ResourceBundle.
-     * @param bundle The ResourceBundle containing localized texts
-     * @return The localized name
-     */
-    public String getName(java.util.ResourceBundle bundle) {
-        return bundle.getString(nameKey);
-    }
-
-    /**
-     * Returns the localized description based on the current ResourceBundle.
-     * @param bundle The ResourceBundle containing localized texts
-     * @return The localized description
-     */
-    public String getDescription(java.util.ResourceBundle bundle) {
-        return bundle.getString(descriptionKey);
-    }
-
-    /**
-     * Returns a localized string representation.
-     * @param bundle The ResourceBundle containing localized texts
-     * @return The localized string
-     */
-    public String toString(java.util.ResourceBundle bundle) {
-        return getName(bundle) + " - " + getDescription(bundle);
     }
 }

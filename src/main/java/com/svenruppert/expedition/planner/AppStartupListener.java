@@ -47,10 +47,10 @@ public class AppStartupListener implements ServletContextListener, HasLogger {
       logger().info("Creating default participants");
       List.of(
               new Participant("Alice", 2000, Set.of(DietaryRestriction.EGG_ALLERGY,
-                      DietaryRestriction.LACTOSE_FREE)),
+                      DietaryRestriction.LACTOSE_FREE, DietaryRestriction.FRUCTOSE_INTOLERANT)),
               new Participant("Bob", 3000, Set.of(DietaryRestriction.HISTAMINE_INTOLERANT)),
               new Participant("Carl", 2750, Set.of(DietaryRestriction.VEGAN)))
-          .forEach(participant -> participantService.add(participant));
+          .forEach(participantService::add);
       participantService.saveRepository();
     } else {
       logger().info("Participants already exists.");
