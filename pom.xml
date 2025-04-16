@@ -87,7 +87,7 @@
         <junit-platform-maven-plugin.timeout>300</junit-platform-maven-plugin.timeout>
 
         <failOnMissingWebXml>false</failOnMissingWebXml>
-        <vaadin.version>24.6.4</vaadin.version>
+        <vaadin.version>24.7.2</vaadin.version>
         <drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
         <jetty.version>11.0.24</jetty.version>
         <testcontainers.version>1.20.4</testcontainers.version>
@@ -271,19 +271,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <!--        <dependency>-->
-        <!--            <groupId>com.vaadin</groupId>-->
-        <!--            <artifactId>vaadin-testbench-junit5</artifactId>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.eclipse.jetty</groupId>-->
-<!--            <artifactId>jetty-server</artifactId>-->
-<!--            <version>${jetty.version}</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
 
 
         <!--    REST-Testing-->

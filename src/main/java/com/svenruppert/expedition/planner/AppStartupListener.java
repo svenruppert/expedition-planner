@@ -3,12 +3,14 @@ package com.svenruppert.expedition.planner;
 import com.svenruppert.dependencies.core.logger.HasLogger;
 import com.svenruppert.expedition.planner.data.entity.DietaryRestriction;
 import com.svenruppert.expedition.planner.data.entity.Participant;
+import com.svenruppert.expedition.planner.data.entity.Tour;
 import com.svenruppert.expedition.planner.services.CreateEntityResponse;
 import com.svenruppert.expedition.planner.services.SingletonRegistry;
 import com.svenruppert.expedition.planner.services.persistence.PersistenceService;
 import com.svenruppert.expedition.planner.services.user.User;
 import com.svenruppert.expedition.planner.services.user.UserService;
 import com.svenruppert.expedition.planner.views.packing.participants.ParticipantService;
+import com.svenruppert.expedition.planner.views.tour.TourService;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
@@ -41,6 +43,28 @@ public class AppStartupListener implements ServletContextListener, HasLogger {
       logger().info("Admin account already exists.");
     }
 
+    checkAndCreateParticipants();
+    checkAndCreateTours();
+
+  }
+
+  private void checkAndCreateTours() {
+    logger().info("Checking for Tours ...");
+    TourService tourService = SingletonRegistry.getOrCreateTourService();
+    if (tourService.all().isEmpty()) {
+      logger().info("Creating default Tours");
+      List.of(
+                new Tour("Norway - Gjendesheim", Set.of()),
+                new Tour("Iceland - Skaftafell", Set.of()),
+                new Tour("Germany - Saxon Switzerland National Park", Set.of())
+              ).forEach(tourService::add);
+      tourService.saveRepository();
+    } else {
+      logger().info("Tours already exists.");
+    }
+  }
+
+  private void checkAndCreateParticipants() {
     logger().info("Checking for participants...");
     ParticipantService participantService = SingletonRegistry.getOrCreateParticipantsService();
     if (participantService.all().isEmpty()) {
@@ -55,8 +79,6 @@ public class AppStartupListener implements ServletContextListener, HasLogger {
     } else {
       logger().info("Participants already exists.");
     }
-
-
   }
 
   @Override

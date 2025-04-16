@@ -13,6 +13,8 @@ import com.svenruppert.expedition.planner.views.packing.itemlist.ItemRepository;
 import com.svenruppert.expedition.planner.views.packing.itemlist.ItemService;
 import com.svenruppert.expedition.planner.views.packing.participants.ParticipantRepository;
 import com.svenruppert.expedition.planner.views.packing.participants.ParticipantService;
+import com.svenruppert.expedition.planner.views.tour.TourRepository;
+import com.svenruppert.expedition.planner.views.tour.TourService;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -162,4 +164,28 @@ public class SingletonRegistry implements HasLogger {
     }
 
 
+    public static TourService getOrCreateTourService() {
+        if (INSTANCES.containsKey(TourService.class)) {
+            return getInstance(TourService.class);
+
+        } else {
+            TourRepository tourRepository = getOrCreateTourRepository();
+            TourService tourService = new TourService(tourRepository);
+            registerInstance(TourService.class, tourService);
+            return tourService;
+        }
+    }
+
+    public static TourRepository getOrCreateTourRepository() {
+
+        if (INSTANCES.containsKey(TourRepository.class)) {
+            return getInstance(TourRepository.class);
+        } else {
+            PersistenceService persistenceService = getOrCreatePersistenceService();
+            DataRoot dataRoot = persistenceService.getDataRoot();
+            TourRepository tourRepository = dataRoot.getTourRepository();
+            registerInstance(TourRepository.class, tourRepository);
+            return tourRepository;
+        }
+    }
 }

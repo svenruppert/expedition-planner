@@ -4,6 +4,7 @@ import com.svenruppert.expedition.planner.services.login.LoginRepository;
 import com.svenruppert.expedition.planner.services.user.UserRepository;
 import com.svenruppert.expedition.planner.views.packing.itemlist.ItemRepository;
 import com.svenruppert.expedition.planner.views.packing.participants.ParticipantRepository;
+import com.svenruppert.expedition.planner.views.tour.TourRepository;
 
 
 public class DataRoot {
@@ -12,6 +13,7 @@ public class DataRoot {
   private final UserRepository userRepository = new UserRepository();
   private final ParticipantRepository participantRepository = new ParticipantRepository();
   private final ItemRepository itemRepository = new ItemRepository();
+  private final TourRepository tourRepository = new TourRepository();
   public String helloWorld;
 
   public ParticipantRepository getParticipantRepository() {
@@ -30,6 +32,9 @@ public class DataRoot {
     return userRepository;
   }
 
+  public TourRepository getTourRepository() {
+    return tourRepository;
+  }
 
   @Override
   public String toString() {
@@ -41,6 +46,4 @@ public class DataRoot {
         ", helloWorld='" + helloWorld + '\'' +
         '}';
   }
-
-
 }
