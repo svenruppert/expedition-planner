@@ -1,8 +1,12 @@
 package com.svenruppert.expedition.planner.views.tour;
 
+import com.svenruppert.expedition.planner.data.entity.Participant;
 import com.svenruppert.expedition.planner.data.entity.Tour;
+import com.svenruppert.expedition.planner.views.packing.participants.ParticipantService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -18,21 +22,30 @@ public class TourForm extends VerticalLayout {
 
     private Optional<SerializableConsumer<Tour>> tourSaveConsumerOptional = Optional.empty();
 
-    public TourForm(TourService tourService) {
+    public TourForm(TourService tourService, ParticipantService participantService) {
         this.tourService = tourService;
 
-        var nameField = new TextField("Tour name");
+        var nameField = new TextField(getTranslation("tour.name.field.label"));
+
+        var participantsField = new MultiSelectComboBox<Participant>(getTranslation("tour.participants.field.label"));
+        participantsField.setItems(participantService.all());
+        participantsField.setItemLabelGenerator(Participant::getName);
 
         tourBinder.forField(nameField)
                 .asRequired()
-                .withValidator(s -> !s.isBlank(), "Tour name is required")
+                .withValidator(s -> !s.isBlank(), getTranslation("tour.name.validation.notblank"))
                 .bind(Tour::getName, Tour::setName);
 
-        var cancelButton = new Button("Cancel", this::cancel);
-        var saveButton = new Button("Save", this::save);
+        tourBinder.forField(participantsField)
+                .bind(Tour::getParticipantSet, Tour::setParticipantSet);
+
+        var cancelButton = new Button(getTranslation("cruddialog.cancel.label"), this::cancel);
+        var saveButton = new Button(getTranslation("cruddialog.save.label"), this::save);
+        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         var buttonLayout = new HorizontalLayout(cancelButton, saveButton);
-        var tourFormLayout = new VerticalLayout(nameField, buttonLayout);
-        add(tourFormLayout);
+
+        var formContent = new VerticalLayout(nameField, participantsField, buttonLayout);
+        add(formContent);
     }
 
     public void setTourSaveConsumer(SerializableConsumer<Tour> tourSaveConsumer) {
@@ -44,8 +57,10 @@ public class TourForm extends VerticalLayout {
     }
 
     private void save(ClickEvent<Button> buttonClickEvent) {
-        tourService.add(tourBinder.getBean());
-        this.tourSaveConsumerOptional.ifPresent(consumer -> consumer.accept(tourBinder.getBean()));
+        if (tourBinder.validate().isOk()) {
+            tourService.add(tourBinder.getBean());
+            this.tourSaveConsumerOptional.ifPresent(consumer -> consumer.accept(tourBinder.getBean()));
+        }
     }
 
     private void cancel(ClickEvent<Button> buttonClickEvent) {

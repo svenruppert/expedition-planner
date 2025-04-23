@@ -4,11 +4,13 @@ import com.svenruppert.expedition.planner.data.entity.Tour;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 
 import java.util.Collection;
 
+import static com.svenruppert.expedition.planner.services.SingletonRegistry.getOrCreateParticipantsService;
 import static com.svenruppert.expedition.planner.services.SingletonRegistry.getOrCreateTourService;
 
 @Route("tours")
@@ -30,13 +32,16 @@ public class TourView extends VerticalLayout implements HasDynamicTitle {
 
     public TourView() {
         var tourService = getOrCreateTourService();
+        var participantService = getOrCreateParticipantsService();
 
         var grid = new Grid<>(Tour.class);
         Collection<Tour> tourList = tourService.all();
         grid.setItems(tourList);
+        grid.setColumns("name");
+        grid.addColumn(createParticipantsRenderer()).setHeader(getTranslation("tour.participants.header"));
         grid.setSizeFull();
 
-        tourForm = new TourForm(tourService);
+        tourForm = new TourForm(tourService, participantService);
         tourForm.setTourSaveConsumer(tour -> grid.getDataProvider().refreshAll());
         tourForm.setWidth(null);
 
@@ -51,6 +56,15 @@ public class TourView extends VerticalLayout implements HasDynamicTitle {
         add(gridFormLayout);
 
         setSizeFull();
+    }
+
+    private LitRenderer<Tour> createParticipantsRenderer() {
+        return LitRenderer.<Tour>of("""
+                        <ol>
+                            ${item.participants.map((participant) => html`<li>${participant.name}</li>`)}
+                        </ol>
+                    """)
+                .withProperty("participants", Tour::getParticipantSet);
     }
 
     @Override

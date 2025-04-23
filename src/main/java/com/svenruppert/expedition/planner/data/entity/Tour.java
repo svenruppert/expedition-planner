@@ -29,6 +29,6 @@ public class Tour {
 
     public void setParticipantSet(Set<Participant> participantSet) {
         //https://docs.eclipsestore.io/manual/storage/addendum/specialized-type-handlers.html#jdk17
-        this.participantSet.retainAll(participantSet);
+        this.participantSet.addAll(participantSet);
     }
 }
