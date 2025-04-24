@@ -9,6 +9,7 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 
 import java.util.Collection;
+import java.util.Set;
 
 import static com.svenruppert.expedition.planner.services.SingletonRegistry.getOrCreateParticipantsService;
 import static com.svenruppert.expedition.planner.services.SingletonRegistry.getOrCreateTourService;
@@ -19,6 +20,7 @@ public class TourView extends VerticalLayout implements HasDynamicTitle {
     public static final String MENU_ITEM_TOUR = "mainlayout.menuitem.tour";
     public static final String TITLE = "tour.title";
     private final TourForm tourForm;
+
     /***
      * 1. create the class
      * 2. configure routing
@@ -29,7 +31,6 @@ public class TourView extends VerticalLayout implements HasDynamicTitle {
      * 7. create a tour form and extract components to an extra component
      * 8. add databinding and refresh grid with consumer
      */
-
     public TourView() {
         var tourService = getOrCreateTourService();
         var participantService = getOrCreateParticipantsService();
@@ -42,13 +43,12 @@ public class TourView extends VerticalLayout implements HasDynamicTitle {
         grid.setSizeFull();
 
         tourForm = new TourForm(tourService, participantService);
+        tourForm.setTour(createEmtpyTourObject());
         tourForm.setTourSaveConsumer(tour -> grid.getDataProvider().refreshAll());
         tourForm.setWidth(null);
 
         grid.asSingleSelect().addValueChangeListener(event -> {
-            if (event.getValue() != null) {
-                tourForm.setTour(event.getValue());
-            }
+                tourForm.setTour(event.getValue() != null ? event.getValue() : createEmtpyTourObject());
         });
 
         var gridFormLayout = new HorizontalLayout(grid, tourForm);
@@ -56,6 +56,10 @@ public class TourView extends VerticalLayout implements HasDynamicTitle {
         add(gridFormLayout);
 
         setSizeFull();
+    }
+
+    private Tour createEmtpyTourObject() {
+        return new Tour("", Set.of());
     }
 
     private LitRenderer<Tour> createParticipantsRenderer() {
