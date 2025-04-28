@@ -13,12 +13,12 @@ public class AbstractService<E> implements HasLogger {
     }
 
     public void add(E entity) {
-        logger().info("Adding entity " + entity.toString());
+      logger().info("Adding entity {}", entity);
         repository.add(entity);
     }
 
     public void delete(E entity) {
-        logger().info("Deleting entity " + entity.toString());
+      logger().info("Deleting entity {}", entity);
         repository.delete(entity);
     }
 
