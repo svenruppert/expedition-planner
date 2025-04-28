@@ -48,6 +48,7 @@ public class AppStartupListener implements ServletContextListener, HasLogger {
 
   }
 
+  //TODO - extract DemoData Init
   private void checkAndCreateTours() {
     logger().info("Checking for Tours ...");
     TourService tourService = SingletonRegistry.getOrCreateTourService();

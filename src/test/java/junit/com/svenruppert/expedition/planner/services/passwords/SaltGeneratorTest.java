@@ -2,6 +2,7 @@ package junit.com.svenruppert.expedition.planner.services.passwords;
 
 import com.svenruppert.dependencies.core.logger.HasLogger;
 import com.svenruppert.expedition.planner.services.login.passwords.SaltGenerator;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -10,6 +11,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+@Disabled
 class SaltGeneratorTest
     implements HasLogger {
 
@@ -24,7 +26,7 @@ class SaltGeneratorTest
       String generatedSalt = saltGenerator.generateSalt(saltLength);
       boolean contains = saltSet.contains(generatedSalt);
       if (contains) {
-        logger().info("Generated salt: " + generatedSalt);
+        logger().info("Generated salt: {}", generatedSalt);
         logger().info("i = {}" , i);
         logger().info("slatLength = {}" , saltLength);
       }

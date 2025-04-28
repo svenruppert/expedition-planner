@@ -329,7 +329,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>3.4.0</version>
             </plugin>
             <!-- Jetty plugin for easy testing without a server -->
             <plugin>
@@ -446,7 +445,7 @@
                     <dependency>
                         <groupId>org.pitest</groupId>
                         <artifactId>pitest-junit5-plugin</artifactId>
-                        <version>1.2.0</version>
+                        <version>1.2.1</version>
                     </dependency>
 
                 </dependencies>
@@ -472,7 +471,7 @@
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>10.12.0</version> <!-- Checkstyle version -->
+                        <version>10.21.4</version> <!-- Checkstyle version -->
                     </dependency>
                 </dependencies>
                 <executions>
@@ -595,7 +594,7 @@
             <plugin>
                 <groupId>org.cyclonedx</groupId>
                 <artifactId>cyclonedx-maven-plugin</artifactId>
-                <version>2.7.1</version>
+                <version>2.7.11</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -652,7 +651,7 @@
                             <dependency>
                                 <groupId>org.ow2.asm</groupId>
                                 <artifactId>asm</artifactId>
-                                <version>9.5</version> <!-- Use newer version of ASM -->
+                                <version>9.7.1</version> <!-- Use newer version of ASM -->
                             </dependency>
                         </dependencies>
                     </plugin>

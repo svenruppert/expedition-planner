@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class CrudGrid<T> extends Composite<Div> {
 
+    protected static final String HUNDRED_PERCENT = "100%";
     private final Grid<T> grid ;
     private final Class<T> clazz;
     private final AbstractCrudDialog<T> dialog;
@@ -31,8 +32,8 @@ public class CrudGrid<T> extends Composite<Div> {
         addButton.addClassNames(LumoUtility.Width.LARGE, LumoUtility.Height.LARGE, LumoUtility.BorderRadius.FULL);
 
         getContent().add(grid, addButton);
-        getContent().setWidth("100%");
-        getContent().setHeight("100%");
+        getContent().setWidth(HUNDRED_PERCENT);
+        getContent().setHeight(HUNDRED_PERCENT);
     }
 
     public void addEditIconColumn() {
