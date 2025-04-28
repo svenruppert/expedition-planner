@@ -26,7 +26,7 @@ public class PersistenceService
 
   public void init(String path) {
     Path storagePath = Paths.get(path);
-    logger().info("Loading storage from " + storagePath.toAbsolutePath());
+    logger().info("Loading storage from {}", storagePath.toAbsolutePath());
     initStorage(storagePath);
   }
 
@@ -91,7 +91,7 @@ public class PersistenceService
   }
 
   public void store(Object object) {
-    logger().info("Storing " + object.getClass().getSimpleName());
+    logger().info("Storing {}", object.getClass().getSimpleName());
     storageManager.store(object);
   }
 

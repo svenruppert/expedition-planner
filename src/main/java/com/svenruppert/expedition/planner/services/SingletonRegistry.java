@@ -50,6 +50,7 @@ public class SingletonRegistry implements HasLogger {
             return getInstance(PersistenceService.class);
         } else {
             PersistenceService persistenceService = new PersistenceService();
+            persistenceService.init();
             registerInstance(PersistenceService.class, persistenceService);
             return persistenceService;
         }

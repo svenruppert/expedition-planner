@@ -37,4 +37,10 @@ public class UserRepository
     return new CreateEntityResponse<>(true, "User " + uid + " created", value);
   }
 
+  public DeleteEntityResponse<User> resetRepository() {
+    logger().info("reset all users");
+    userRepo.clear();
+    saveRepository();
+    return new DeleteEntityResponse<>(true, "All users reset", ANONYMOUS_USER);
+  }
 }

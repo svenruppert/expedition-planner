@@ -14,6 +14,7 @@ public class DataRoot {
   private final ParticipantRepository participantRepository = new ParticipantRepository();
   private final ItemRepository itemRepository = new ItemRepository();
   private final TourRepository tourRepository = new TourRepository();
+  //TODO - remove
   public String helloWorld;
 
   public ParticipantRepository getParticipantRepository() {
@@ -43,7 +44,7 @@ public class DataRoot {
         ", userRepository=" + userRepository +
         ", participantRepository=" + participantRepository +
         ", itemRepository=" + itemRepository +
-        ", helloWorld='" + helloWorld + '\'' +
+        ", tourRepository=" + tourRepository +
         '}';
   }
 }

@@ -31,13 +31,6 @@ public class LoginRepository
     return userLoginRepoLoginName.getOrDefault(loginName, ANONYMOUS_LOGIN);
   }
 
-  public DeleteEntityResponse<Login> deleteLogin(Login login) {
-    logger().warn("deleting login {}", login);
-    userLoginRepoLoginName.remove(login.loginName());
-    userLoginRepoUid.remove(login.uid());
-    return new DeleteEntityResponse<>(true, "Login " + login.loginName() + " deleted", login);
-  }
-
   public CreateEntityResponse<Login> createLogin(Login login) {
     return createLogin(login.loginName(), login.passwordHash(), login.salt());
   }
@@ -92,6 +85,38 @@ public class LoginRepository
     userLoginRepoLoginName.put(login.loginName(), login);
     userLoginRepoUid.put(login.uid(), login);
     return new CreateEntityResponse<>(true, "Login " + login.loginName() + " stored", login);
+  }
+
+  public DeleteEntityResponse<Login> deleteLogin(Login  login) {
+    logger().info("deleting login {}", login.uid());
+    var removedA = userLoginRepoUid.remove(login.uid());
+    if (removedA == null) {
+      logger().warn("could not delete login {} - was not in Map userLoginRepoUid", login.uid());
+      return new DeleteEntityResponse<>(false, "Login " + login.uid() + " was not in Map userLoginRepoUid", login);
+    }
+    var removedB = userLoginRepoLoginName.remove(login.loginName());
+    if (removedB == null) {
+      logger().warn("could not delete login {} - was not in Map userLoginRepoLoginName", login.uid());
+       return new DeleteEntityResponse<>(false, "Login " + login.uid() + " was not in Map userLoginRepoLoginName", login);
+    }
+
+    var equalsA = removedA.equals(login);
+    var equalsB = removedB.equals(login);
+    if(equalsA && equalsB) {
+      logger().info("login {} has been deleted - persisting the repo now", login);
+      saveRepository();
+    } else {
+      logger().warn("Data in Maps inconsistent.. A:{} B:{}", equalsA, equalsB);
+    }
+    return new DeleteEntityResponse<>(true, "Login " + login.uid() + " deleted", login);
+  }
+
+  public DeleteEntityResponse<Login> resetRepository() {
+    logger().info("resetting Login repository");
+    userLoginRepoUid.clear();
+    userLoginRepoLoginName.clear();
+    saveRepository();
+    return new DeleteEntityResponse<>(true, "All logins deleted", ANONYMOUS_LOGIN);
   }
 
 
