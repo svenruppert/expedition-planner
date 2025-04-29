@@ -10,6 +10,7 @@ import org.eclipse.store.storage.types.StorageConfiguration;
 import org.eclipse.store.storage.types.StorageLiveFileProvider;
 import org.eclipse.store.storage.types.StorageManager;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -20,25 +21,52 @@ public class PersistenceService
   private StorageManager storageManager;
   private DataRoot dataRoot;
 
+  public boolean isUpAndRunning() {
+    if (storageManager == null) {
+      logger().warn("Storage Manager is null");
+      return false;
+    }
+    if (!storageManager.isRunning()) {
+      logger().warn("Storage Manager is not running");
+      return false;
+    }
+
+    if (!storageManager.isActive()) {
+      logger().warn("Storage Manager is not active");
+      return false;
+    }
+    if (dataRoot == null) {
+      logger().warn("DataRoot is null");
+      return false;
+    }
+    return true;
+  }
+
+
   public void init() {
     init(DEFAULT_STORAGE);
   }
 
   public void init(String path) {
-    Path storagePath = Paths.get(path);
-    logger().info("Loading storage from {}", storagePath.toAbsolutePath());
-    initStorage(storagePath);
+    init(Paths.get(path));
   }
 
   public void init(Path storagePath) {
-    initStorage(storagePath);
+    try {
+      logger().info("Initializing storage from {}", storagePath.toAbsolutePath());
+      initStorage(storagePath);
+    } catch (Exception e) {
+      logger().error("Failed to initialize storage at {}: {}", storagePath.toAbsolutePath(), e.getMessage(), e);
+      throw new RuntimeException("Failed to initialize storage", e);
+    }
   }
 
-  private void initStorage(Path storagePath) {
-    if (storagePath.toFile().exists()) {
-      logger().info("The storage path already exists.");
-      NioFileSystem fileSystem = NioFileSystem.New();
+  private void initStorage(Path storagePath)
+      throws Exception {
+    if (Files.exists(storagePath)) {
+      logger().info("The storage path exists.");
 
+      NioFileSystem fileSystem = NioFileSystem.New();
       ADirectory aDirectory = fileSystem.ensureDirectoryPath(storagePath.toString());
 
       StorageLiveFileProvider fileProvider = Storage
@@ -54,49 +82,78 @@ public class PersistenceService
       EmbeddedStorageFoundation.New()
           .setConfiguration(configuration);
 
-      this.storageManager = EmbeddedStorage
-          .start(configuration);
+      this.storageManager = EmbeddedStorage.start(configuration);
 
-      Object root = this.storageManager.root();
+      Object root = storageManager.root();
       if (root == null) {
-        logger().info("The storage root object is not set... creating a new one");
+        logger().info("The storage root object is not set. Creating new one...");
         DataRoot newDataRoot = new DataRoot();
-        this.storageManager.setRoot(newDataRoot);
-        this.storageManager.storeRoot();
+        storageManager.setRoot(newDataRoot);
+        storageManager.storeRoot();
       } else {
-        logger().info("The storage root object is already set...");
+        logger().info("The storage root object is already set.");
       }
-      this.dataRoot = (DataRoot) this.storageManager.root();
+      this.dataRoot = (DataRoot) storageManager.root();
     } else {
-      logger().info("The storage path does not exist.");
+      logger().info("The storage path does not exist. Creating new storage...");
       DataRoot newDataRoot = new DataRoot();
-      this.storageManager = EmbeddedStorage
-          .start(newDataRoot, storagePath);
-      this.dataRoot = (DataRoot) this.storageManager.root();
+      this.storageManager = EmbeddedStorage.start(newDataRoot, storagePath);
+      this.dataRoot = (DataRoot) storageManager.root();
     }
-
   }
 
-  public void close() {
-    storageManager.close();
+  public synchronized void close() {
+    if (storageManager != null) {
+      try {
+        logger().info("Closing storage manager...");
+        storageManager.close();
+      } catch (Exception e) {
+        logger().error("Error while closing storage manager: {}", e.getMessage(), e);
+      }
+    }
   }
 
-  public void shutdown() {
-    close();
-    storageManager.shutdown();
+  public synchronized void shutdown() {
+    if (storageManager != null) {
+      try {
+        logger().info("Shutting down storage manager...");
+        storageManager.shutdown();
+      } catch (Exception e) {
+        logger().error("Error while shutting down storage manager: {}", e.getMessage(), e);
+      }
+    }
   }
 
   public DataRoot getDataRoot() {
+    if (dataRoot == null) {
+      throw new IllegalStateException("The data root object is not set.");
+    }
     return dataRoot;
   }
 
-  public void store(Object object) {
-    logger().info("Storing {}", object.getClass().getSimpleName());
-    storageManager.store(object);
+  public synchronized void store(Object object) {
+    if (storageManager != null) {
+      try {
+        logger().info("Storing {}", object.getClass().getSimpleName());
+        storageManager.store(object);
+      } catch (Exception e) {
+        logger().error("Error while storing {}: {}", object.getClass().getSimpleName(), e.getMessage(), e);
+      }
+    } else {
+      logger().warn("Storage manager not initialized. Cannot store object.");
+    }
   }
 
-  public void storeRoot() {
-    logger().info("Storing root object...");
-    storageManager.storeRoot();
+  public synchronized void storeRoot() {
+    if (storageManager != null) {
+      try {
+        logger().info("Storing root object...");
+        storageManager.storeRoot();
+      } catch (Exception e) {
+        logger().error("Error while storing root object: {}", e.getMessage(), e);
+      }
+    } else {
+      logger().warn("Storage manager not initialized. Cannot store root.");
+    }
   }
 }

@@ -87,7 +87,7 @@ public class LoginRepository
     return new CreateEntityResponse<>(true, "Login " + login.loginName() + " stored", login);
   }
 
-  public DeleteEntityResponse<Login> deleteLogin(Login  login) {
+  public DeleteEntityResponse<Login> deleteLogin(Login login) {
     logger().info("deleting login {}", login.uid());
     var removedA = userLoginRepoUid.remove(login.uid());
     if (removedA == null) {
@@ -97,12 +97,12 @@ public class LoginRepository
     var removedB = userLoginRepoLoginName.remove(login.loginName());
     if (removedB == null) {
       logger().warn("could not delete login {} - was not in Map userLoginRepoLoginName", login.uid());
-       return new DeleteEntityResponse<>(false, "Login " + login.uid() + " was not in Map userLoginRepoLoginName", login);
+      return new DeleteEntityResponse<>(false, "Login " + login.uid() + " was not in Map userLoginRepoLoginName", login);
     }
 
     var equalsA = removedA.equals(login);
     var equalsB = removedB.equals(login);
-    if(equalsA && equalsB) {
+    if (equalsA && equalsB) {
       logger().info("login {} has been deleted - persisting the repo now", login);
       saveRepository();
     } else {
