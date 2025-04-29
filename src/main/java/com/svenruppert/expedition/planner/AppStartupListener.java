@@ -25,10 +25,6 @@ public class AppStartupListener implements ServletContextListener, HasLogger {
   @Override
   public void contextInitialized(ServletContextEvent sce) {
     logger().info("Webanwendung wird gestartet...");
-    // Hier kannst du z. B. eine Datenbankverbindung initialisieren
-    PersistenceService persistenceService = SingletonRegistry.getOrCreatePersistenceService();
-    persistenceService.init();
-
     //TODO Security Issue
     logger().warn("Checking for admin account..");
     UserService userService = SingletonRegistry.getOrCreateUserService();
