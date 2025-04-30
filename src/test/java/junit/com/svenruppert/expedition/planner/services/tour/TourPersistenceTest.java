@@ -10,7 +10,6 @@ import com.svenruppert.expedition.planner.services.persistence.DataRoot;
 import com.svenruppert.expedition.planner.services.persistence.PersistenceService;
 import com.svenruppert.expedition.planner.services.tour.TourService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestReporter;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.nio.file.Path;

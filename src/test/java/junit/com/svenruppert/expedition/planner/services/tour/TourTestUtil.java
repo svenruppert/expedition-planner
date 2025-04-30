@@ -10,7 +10,7 @@ import java.util.Set;
 
 class TourTestUtil {
 
-    static List<Tour> createTestTours(TourService tourService) {
+    static void createTestTours(TourService tourService) {
         // Teilnehmer erstellen
         Participant max = createParticipant("Max Mustermann", 2500,
                 Set.of(DietaryRestriction.LACTOSE_FREE));
@@ -43,8 +43,6 @@ class TourTestUtil {
         for (Tour tour : testTours) {
             tourService.create(tour);
         }
-
-        return testTours;
     }
 
     static Tour createTour(String name, Set<Participant> participants) {
