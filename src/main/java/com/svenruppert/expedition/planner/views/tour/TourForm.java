@@ -59,7 +59,7 @@ public class TourForm extends VerticalLayout {
 
     private void save(ClickEvent<Button> buttonClickEvent) {
         if (tourBinder.validate().isOk()) {
-            tourService.add(tourBinder.getBean());
+            tourService.save(tourBinder.getBean());
             this.tourSaveConsumerOptional.ifPresent(consumer -> consumer.accept(tourBinder.getBean()));
         }
     }
