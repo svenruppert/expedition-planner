@@ -4,7 +4,9 @@ import com.svenruppert.expedition.planner.data.entity.Tour;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.LitRenderer;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 
@@ -21,6 +23,8 @@ public class TourView extends VerticalLayout implements HasDynamicTitle {
     public static final String TITLE = "tour.title";
     private final TourForm tourForm;
 
+    private final Grid<Tour> grid = new Grid<>(Tour.class);
+
     /***
      * 1. create the class
      * 2. configure routing
@@ -35,7 +39,14 @@ public class TourView extends VerticalLayout implements HasDynamicTitle {
         var tourService = getOrCreateTourService();
         var participantService = getOrCreateParticipantsService();
 
-        var grid = new Grid<>(Tour.class);
+        var filterField = new TextField("");
+        filterField.setPlaceholder("filter for tour name");
+        filterField.setClearButtonVisible(true);
+        filterField.setValueChangeMode(ValueChangeMode.EAGER);
+        filterField.setWidthFull();
+        filterField.addValueChangeListener(event ->
+                grid.setItems(tourService.getByName(event.getValue())));
+
         Collection<Tour> tourList = tourService.all();
         grid.setItems(tourList);
         grid.setColumns("name");
@@ -44,14 +55,17 @@ public class TourView extends VerticalLayout implements HasDynamicTitle {
 
         tourForm = new TourForm(tourService, participantService);
         tourForm.setTour(createEmtpyTourObject());
-        tourForm.setTourSaveConsumer(tour -> grid.getDataProvider().refreshAll());
+        tourForm.setTourSaveConsumer(_ -> grid.getDataProvider().refreshAll());
+        tourForm.setTourDeleteConsumer(_ -> {
+            grid.getDataProvider().refreshAll();
+            tourForm.setTour(createEmtpyTourObject());
+        });
         tourForm.setWidth(null);
 
-        grid.asSingleSelect().addValueChangeListener(event -> {
-                tourForm.setTour(event.getValue() != null ? event.getValue() : createEmtpyTourObject());
-        });
+        grid.asSingleSelect().addValueChangeListener(event ->
+                tourForm.setTour(event.getValue() != null ? event.getValue() : createEmtpyTourObject()));
 
-        var gridFormLayout = new HorizontalLayout(grid, tourForm);
+        var gridFormLayout = new HorizontalLayout(new VerticalLayout(filterField, grid), tourForm);
         gridFormLayout.setSizeFull();
         add(gridFormLayout);
 

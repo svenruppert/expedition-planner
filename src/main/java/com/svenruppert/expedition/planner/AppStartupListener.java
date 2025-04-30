@@ -6,11 +6,11 @@ import com.svenruppert.expedition.planner.data.entity.Participant;
 import com.svenruppert.expedition.planner.data.entity.Tour;
 import com.svenruppert.expedition.planner.services.CreateEntityResponse;
 import com.svenruppert.expedition.planner.services.SingletonRegistry;
+import com.svenruppert.expedition.planner.services.packing.ParticipantService;
 import com.svenruppert.expedition.planner.services.persistence.PersistenceService;
+import com.svenruppert.expedition.planner.services.tour.TourService;
 import com.svenruppert.expedition.planner.services.user.User;
 import com.svenruppert.expedition.planner.services.user.UserService;
-import com.svenruppert.expedition.planner.services.packing.ParticipantService;
-import com.svenruppert.expedition.planner.services.tour.TourService;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
@@ -50,12 +50,18 @@ public class AppStartupListener implements ServletContextListener, HasLogger {
     TourService tourService = SingletonRegistry.getOrCreateTourService();
     if (tourService.all().isEmpty()) {
       logger().info("Creating default Tours");
-      List.of(
-                new Tour("Norway - Gjendesheim", Set.of()),
-                new Tour("Iceland - Skaftafell", Set.of()),
-                new Tour("Germany - Saxon Switzerland National Park", Set.of())
-              ).forEach(tourService::add);
-      tourService.saveRepository();
+      Set<Tour> tours = Set.of(
+              new Tour("Norway - Gjendesheim", Set.of()),
+              new Tour("Iceland - Skaftafell", Set.of()),
+              new Tour("Germany - Saxon Switzerland National Park", Set.of())
+      );
+      tours.forEach(tour -> {
+        CreateEntityResponse<Tour> response = tourService.create(tour);
+        if (!response.created())
+          logger().error("Tour {} could not be created", tour.getName());
+        else
+          logger().info("Example Tour created: {}", response.message());
+      });
     } else {
       logger().info("Tours already exists.");
     }
