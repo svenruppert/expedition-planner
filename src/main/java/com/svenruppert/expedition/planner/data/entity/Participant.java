@@ -9,6 +9,9 @@ public class Participant {
     private Integer dailyCaloricRequirement ;
     private Set<DietaryRestriction> restrictions = new HashSet<>();
 
+    public Participant() {
+    }
+
     public Participant(String name, Integer dailyCaloricRequirement, Set<DietaryRestriction> restrictions) {
         this.name = name;
         this.dailyCaloricRequirement = dailyCaloricRequirement;

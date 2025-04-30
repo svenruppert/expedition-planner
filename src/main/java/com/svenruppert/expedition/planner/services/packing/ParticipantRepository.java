@@ -1,4 +1,4 @@
-package com.svenruppert.expedition.planner.views.packing.participants;
+package com.svenruppert.expedition.planner.services.packing;
 
 import com.svenruppert.expedition.planner.data.entity.Participant;
 import com.svenruppert.expedition.planner.services.persistence.AbstractRepository;

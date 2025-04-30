@@ -5,8 +5,8 @@ import com.svenruppert.expedition.planner.data.entity.Item;
 import com.svenruppert.expedition.planner.data.entity.Participant;
 import com.svenruppert.expedition.planner.services.SingletonRegistry;
 import com.svenruppert.expedition.planner.views.packing.PackingMainLayout;
-import com.svenruppert.expedition.planner.views.packing.itemlist.ItemService;
-import com.svenruppert.expedition.planner.views.packing.participants.ParticipantService;
+import com.svenruppert.expedition.planner.services.packing.PackingItemService;
+import com.svenruppert.expedition.planner.services.packing.ParticipantService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.grid.Grid;
@@ -24,8 +24,8 @@ public class AssignmentBoardView extends AbstractView<VerticalLayout> {
     public AssignmentBoardView() {
         super(SUB_TITLE);
 
-        ItemService itemService = SingletonRegistry.getOrCreateItemService();
-        var itemList = itemService.all();
+        PackingItemService packingItemService = SingletonRegistry.getOrCreateItemService();
+        var itemList = packingItemService.all();
 
         ParticipantService participantService = SingletonRegistry.getOrCreateParticipantsService();
         var participantList = participantService.all();

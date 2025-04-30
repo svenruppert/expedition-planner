@@ -1,10 +1,10 @@
 package com.svenruppert.expedition.planner.services.persistence;
 
 import com.svenruppert.expedition.planner.services.login.LoginRepository;
+import com.svenruppert.expedition.planner.services.packing.PackingItemRepository;
 import com.svenruppert.expedition.planner.services.user.UserRepository;
-import com.svenruppert.expedition.planner.views.packing.itemlist.ItemRepository;
-import com.svenruppert.expedition.planner.views.packing.participants.ParticipantRepository;
-import com.svenruppert.expedition.planner.views.tour.TourRepository;
+import com.svenruppert.expedition.planner.services.packing.ParticipantRepository;
+import com.svenruppert.expedition.planner.services.tour.TourRepository;
 
 
 public class DataRoot {
@@ -12,7 +12,7 @@ public class DataRoot {
   private final LoginRepository loginRepository = new LoginRepository();
   private final UserRepository userRepository = new UserRepository();
   private final ParticipantRepository participantRepository = new ParticipantRepository();
-  private final ItemRepository itemRepository = new ItemRepository();
+  private final PackingItemRepository packingItemRepository = new PackingItemRepository();
   private final TourRepository tourRepository = new TourRepository();
   //TODO - remove
   public String helloWorld;
@@ -21,8 +21,8 @@ public class DataRoot {
     return participantRepository;
   }
 
-  public ItemRepository getItemRepository() {
-    return itemRepository;
+  public PackingItemRepository getItemRepository() {
+    return packingItemRepository;
   }
 
   public LoginRepository getLoginRepository() {
@@ -43,7 +43,7 @@ public class DataRoot {
         "loginRepository=" + loginRepository +
         ", userRepository=" + userRepository +
         ", participantRepository=" + participantRepository +
-        ", itemRepository=" + itemRepository +
+        ", itemRepository=" + packingItemRepository +
         ", tourRepository=" + tourRepository +
         '}';
   }

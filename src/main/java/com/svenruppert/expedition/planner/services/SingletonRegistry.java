@@ -5,16 +5,16 @@ import com.svenruppert.expedition.planner.services.auth.AuthService;
 import com.svenruppert.expedition.planner.services.login.LoginRepository;
 import com.svenruppert.expedition.planner.services.login.LoginService;
 import com.svenruppert.expedition.planner.services.login.passwords.SaltGenerator;
+import com.svenruppert.expedition.planner.services.packing.PackingItemRepository;
 import com.svenruppert.expedition.planner.services.persistence.DataRoot;
 import com.svenruppert.expedition.planner.services.persistence.PersistenceService;
 import com.svenruppert.expedition.planner.services.user.UserRepository;
 import com.svenruppert.expedition.planner.services.user.UserService;
-import com.svenruppert.expedition.planner.views.packing.itemlist.ItemRepository;
-import com.svenruppert.expedition.planner.views.packing.itemlist.ItemService;
-import com.svenruppert.expedition.planner.views.packing.participants.ParticipantRepository;
-import com.svenruppert.expedition.planner.views.packing.participants.ParticipantService;
-import com.svenruppert.expedition.planner.views.tour.TourRepository;
-import com.svenruppert.expedition.planner.views.tour.TourService;
+import com.svenruppert.expedition.planner.services.packing.PackingItemService;
+import com.svenruppert.expedition.planner.services.packing.ParticipantRepository;
+import com.svenruppert.expedition.planner.services.packing.ParticipantService;
+import com.svenruppert.expedition.planner.services.tour.TourRepository;
+import com.svenruppert.expedition.planner.services.tour.TourService;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -80,26 +80,26 @@ public class SingletonRegistry implements HasLogger {
         }
     }
 
-    private static ItemRepository getOrCreateItemRepository() {
-        if (INSTANCES.containsKey(ItemRepository.class)) {
-            return getInstance(ItemRepository.class);
+    private static PackingItemRepository getOrCreateItemRepository() {
+        if (INSTANCES.containsKey(PackingItemRepository.class)) {
+            return getInstance(PackingItemRepository.class);
         } else {
             PersistenceService persistenceService = getOrCreatePersistenceService();
             DataRoot dataRoot = persistenceService.getDataRoot();
-            ItemRepository itemRepository = dataRoot.getItemRepository();
-            registerInstance(ItemRepository.class, itemRepository);
-            return itemRepository;
+            PackingItemRepository packingItemRepository = dataRoot.getItemRepository();
+            registerInstance(PackingItemRepository.class, packingItemRepository);
+            return packingItemRepository;
         }
     }
 
-    public static ItemService getOrCreateItemService() {
-        if (INSTANCES.containsKey(ItemService.class)) {
-            return getInstance(ItemService.class);
+    public static PackingItemService getOrCreateItemService() {
+        if (INSTANCES.containsKey(PackingItemService.class)) {
+            return getInstance(PackingItemService.class);
         } else {
-            ItemRepository itemRepository = getOrCreateItemRepository();
-            ItemService itemService = new ItemService(itemRepository);
-            registerInstance(ItemService.class, itemService);
-            return itemService;
+            PackingItemRepository packingItemRepository = getOrCreateItemRepository();
+            PackingItemService packingItemService = new PackingItemService(packingItemRepository);
+            registerInstance(PackingItemService.class, packingItemService);
+            return packingItemService;
         }
     }
 

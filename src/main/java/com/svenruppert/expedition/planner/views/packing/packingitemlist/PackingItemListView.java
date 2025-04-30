@@ -1,9 +1,10 @@
-package com.svenruppert.expedition.planner.views.packing.itemlist;
+package com.svenruppert.expedition.planner.views.packing.packingitemlist;
 
 import com.svenruppert.expedition.planner.components.AbstractCrudView;
 import com.svenruppert.expedition.planner.components.CrudGrid;
 import com.svenruppert.expedition.planner.data.entity.Item;
 import com.svenruppert.expedition.planner.data.entity.Participant;
+import com.svenruppert.expedition.planner.services.packing.PackingItemService;
 import com.svenruppert.expedition.planner.views.packing.PackingMainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.checkbox.Checkbox;
@@ -15,13 +16,13 @@ import com.vaadin.flow.router.Route;
 
 import static com.svenruppert.expedition.planner.services.SingletonRegistry.*;
 
-@Route(ItemListView.VIEW_ROUTE)
-public class ItemListView extends AbstractCrudView<Item, ItemService, VerticalLayout> {
+@Route(PackingItemListView.VIEW_ROUTE)
+public class PackingItemListView extends AbstractCrudView<Item, PackingItemService, VerticalLayout> {
 
     public static final String SUB_TITLE = "packing.itemlist.subtitle";
-    public static final String VIEW_ROUTE = PackingMainLayout.PACKING_ROUTE + "itemlist";
+    public static final String VIEW_ROUTE = PackingMainLayout.PACKING_ROUTE + "packingitemlist";
 
-    public ItemListView() {
+    public PackingItemListView() {
         super(Item.class, SUB_TITLE);
 
         CrudGrid<Item> crudGrid = getCrudGrid();
@@ -40,7 +41,7 @@ public class ItemListView extends AbstractCrudView<Item, ItemService, VerticalLa
     }
 
     @Override
-    protected ItemService getService() {
+    protected PackingItemService getService() {
         return getOrCreateItemService();
     }
 

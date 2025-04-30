@@ -2,7 +2,7 @@ package com.svenruppert.expedition.planner.views.packing;
 
 import com.svenruppert.expedition.planner.MainLayout;
 import com.svenruppert.expedition.planner.views.packing.assignment.AssignmentBoardView;
-import com.svenruppert.expedition.planner.views.packing.itemlist.ItemListView;
+import com.svenruppert.expedition.planner.views.packing.packingitemlist.PackingItemListView;
 import com.svenruppert.expedition.planner.views.packing.participants.ParticipantsView;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -22,7 +22,7 @@ public class PackingMainLayout extends Composite<VerticalLayout>
     public PackingMainLayout() {
         Tabs tabs = new Tabs();
 
-        tabs.add(new Tab(new RouterLink(getTranslation(ItemListView.SUB_TITLE), ItemListView.class)));
+        tabs.add(new Tab(new RouterLink(getTranslation(PackingItemListView.SUB_TITLE), PackingItemListView.class)));
         tabs.add(new Tab(new RouterLink(getTranslation(ParticipantsView.SUB_TITLE), ParticipantsView.class)));
         tabs.add(new Tab(new RouterLink(getTranslation(AssignmentBoardView.SUB_TITLE), AssignmentBoardView.class)));
 

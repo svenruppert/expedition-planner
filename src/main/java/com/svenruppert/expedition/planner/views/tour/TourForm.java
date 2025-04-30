@@ -2,7 +2,8 @@ package com.svenruppert.expedition.planner.views.tour;
 
 import com.svenruppert.expedition.planner.data.entity.Participant;
 import com.svenruppert.expedition.planner.data.entity.Tour;
-import com.svenruppert.expedition.planner.views.packing.participants.ParticipantService;
+import com.svenruppert.expedition.planner.services.tour.TourService;
+import com.svenruppert.expedition.planner.services.packing.ParticipantService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;

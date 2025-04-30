@@ -3,6 +3,7 @@ package com.svenruppert.expedition.planner.views.packing.participants;
 import com.svenruppert.expedition.planner.components.AbstractCrudView;
 import com.svenruppert.expedition.planner.data.entity.DietaryRestriction;
 import com.svenruppert.expedition.planner.data.entity.Participant;
+import com.svenruppert.expedition.planner.services.packing.ParticipantService;
 import com.svenruppert.expedition.planner.views.packing.PackingMainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.combobox.MultiSelectComboBox;
