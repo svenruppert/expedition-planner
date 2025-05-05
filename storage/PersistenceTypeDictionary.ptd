@@ -293,6 +293,9 @@
 	double  value    ,
 }
 0000000000001000019 java.util.Collections$UnmodifiableNavigableSet$EmptyNavigableSet{}
+0000000000001000022 java.util.Collections$UnmodifiableSet{
+	java.util.Collection java.util.Collections$UnmodifiableCollection#c,
+}
 0000000000001000024 java.util.Collections$UnmodifiableNavigableMap$EmptyNavigableMap{}
 0000000000001000028 java.util.Collections$ReverseComparator{}
 0000000000001000029 java.util.WeakHashMap{
@@ -553,13 +556,4 @@
 	java.lang.String com.svenruppert.expedition.planner.data.entity.Tour#name          ,
 	java.util.Set    com.svenruppert.expedition.planner.data.entity.Tour#participantSet,
 }
-0000000000001000088 java.util.Collections$UnmodifiableSet{
-	java.util.Collection java.util.Collections$UnmodifiableCollection#c,
-}
-0000000000001000090 java.util.Collection{}
-0000000000001000091 com.svenruppert.expedition.planner.services.tour.TourRepository{
-	java.util.Map com.svenruppert.expedition.planner.services.tour.TourRepository#nameTourMap,
-}
-0000000000001000092 java.util.HashMap$Values{
-	java.util.HashMap java.util.HashMap$Values#this$0,
-}
+0000000000001000088 java.util.Collection{}
