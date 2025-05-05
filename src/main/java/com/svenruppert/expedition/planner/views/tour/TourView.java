@@ -5,7 +5,7 @@ import com.vaadin.flow.router.HasDynamicTitle;
 import com.vaadin.flow.router.Route;
 
 @Route("tours")
-public class TourView extends VerticalLayout {
+public class TourView extends VerticalLayout implements HasDynamicTitle {
 
     /***
      * 1. - create the class
@@ -16,8 +16,14 @@ public class TourView extends VerticalLayout {
      */
 
     public static final String MENU_ITEM_TOUR = "mainlayout.menuitem.tour";
+    public static final String TITLE = "tour.title";
 
     public TourView() {
 
+    }
+
+    @Override
+    public String getPageTitle() {
+        return getTranslation(TITLE);
     }
 }
