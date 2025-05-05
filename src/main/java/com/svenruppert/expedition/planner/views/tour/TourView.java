@@ -2,6 +2,8 @@ package com.svenruppert.expedition.planner.views.tour;
 
 import com.svenruppert.expedition.planner.data.entity.Tour;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -55,10 +57,18 @@ public class TourView extends VerticalLayout implements HasDynamicTitle {
 
         tourForm = new TourForm(tourService, participantService);
         tourForm.setTour(createEmtpyTourObject());
-        tourForm.setTourSaveConsumer(_ -> grid.getDataProvider().refreshAll());
+        tourForm.setTourSaveConsumer(_ -> {
+                    grid.getDataProvider().refreshAll();
+                    Notification
+                            .show(getTranslation("tour.crud.save.message"), 3000, Notification.Position.BOTTOM_CENTER)
+                            .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                });
         tourForm.setTourDeleteConsumer(_ -> {
             grid.getDataProvider().refreshAll();
             tourForm.setTour(createEmtpyTourObject());
+            Notification
+                    .show(getTranslation("tour.crud.delete.message"), 3000, Notification.Position.BOTTOM_CENTER)
+                    .addThemeVariants(NotificationVariant.LUMO_ERROR);
         });
         tourForm.setWidth(null);
 
